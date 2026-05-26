@@ -1,6 +1,6 @@
 # Solve the following problem:
 # Write a function to calculate the number of seconds in a week
-
+answer =604800
 # Write code here
 
 def seconds_in_week():
