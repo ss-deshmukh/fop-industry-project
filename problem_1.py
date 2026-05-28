@@ -8,7 +8,7 @@ def seconds_in_week():
   b=60*a
   c=24*b
   d=7*c
+  result=d
+  return(result)
 
-  return(d)
-
-print(result)
+print(seconds_in_week)
