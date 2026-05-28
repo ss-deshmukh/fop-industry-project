@@ -4,7 +4,13 @@
 # Write code here
 
 def seconds_in_week():
+a=60
+b=60×a
+c=24×b
+d=7×c
+result=d
+return (result)
 
-  return(result)
+print(second_in_week)
 
-print(seconds_in_week)
+
