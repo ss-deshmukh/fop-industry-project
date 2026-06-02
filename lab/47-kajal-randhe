@@ -3,3 +3,13 @@ while x<10:
 x=x+1
 print(x)
 #problem2
+
+a=2
+b=26
+c=37
+1=[a,b,c]
+for x in 1:
+    ifx % 2 == 0:
+      print("Even")
+      else
+      print("Odd")
