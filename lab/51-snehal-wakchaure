@@ -1,0 +1,11 @@
+a=2
+b=26
+c=37
+def check e o(n):
+    if n%2==0
+    print("even")
+    else:
+    print("odd")
+    chk e o(a)
+    chk e o(b)
+    chk e o(c)
