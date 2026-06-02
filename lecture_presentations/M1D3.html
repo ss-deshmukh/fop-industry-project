@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Day 3 — Collections · From Bits to Blockchain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ─────────────────────────────────────────────
+     THEME TOKENS  ·  Module 1 (cyan)
+     ───────────────────────────────────────────── */
+  :root {
+    --bg:        #0A0A0F;
+    --surface:   #0F0F1A;
+    --panel:     #15151F;
+    --panel-2:   #1A1A28;
+    --border:    #1E1E2E;
+    --border-2:  #2A2A3E;
+    --text:      #E2E8F0;
+    --text-2:    #F1F5F9;
+    --muted:     #94A3B8;
+    --dim:       #64748B;
+    --faint:     #475569;
+
+    --accent:    #00D4FF;   /* Module 1 cyan */
+    --accent-2:  #0891B2;
+
+    /* syntax */
+    --tok-kw:    #C678DD;   /* keywords (def, for, in, if) */
+    --tok-str:   #98C379;   /* strings */
+    --tok-num:   #D19A66;   /* numbers */
+    --tok-com:   #5C6370;   /* comments */
+    --tok-bi:    #61AFEF;   /* builtins (print, len, sum) */
+    --tok-var:   #E06C75;   /* variables */
+
+    --mono: 'IBM Plex Mono', 'Consolas', ui-monospace, monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+
+  /* ─────────────────────────────────────────────
+     RESET & GLOBAL
+     ───────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%;
+    background: #000;
+    overflow: hidden;
+    color: var(--text);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ─────────────────────────────────────────────
+     DECK SCALING — designed at 1280×720, scaled to viewport via JS
+     ───────────────────────────────────────────── */
+  #deck {
+    position: absolute;
+    width: 1280px;
+    height: 720px;
+    transform-origin: top left;
+    background: var(--bg);
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+    display: none;
+    padding: 0;
+  }
+  .slide.active { display: block; }
+
+  /* Top thin accent line, bottom footer label — shared chrome */
+  .slide::before {
+    content: "";
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--accent);
+  }
+
+  /* ─────────────────────────────────────────────
+     PAGE CHROME — module crumb (top-left), page indicator (top-right), footer
+     ───────────────────────────────────────────── */
+  .crumb {
+    position: absolute;
+    top: 18px; left: 44px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .crumb .c-mod { color: var(--accent); font-weight: 700; }
+  .crumb .sep { color: var(--faint); margin: 0 10px; }
+
+  .pageno {
+    position: absolute;
+    top: 18px; right: 44px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+  .pageno .cur { color: var(--accent); font-weight: 700; }
+  .pageno .sep { color: var(--faint); margin: 0 6px; }
+
+  .footer {
+    position: absolute;
+    bottom: 22px; left: 44px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+  }
+  .footer em { color: var(--muted); font-style: italic; font-family: var(--sans); }
+  .footer .sep { color: var(--faint); margin: 0 12px; }
+
+  /* ─────────────────────────────────────────────
+     SLIDE TITLE — uniform across content slides
+     ───────────────────────────────────────────── */
+  .title {
+    position: absolute;
+    top: 56px; left: 44px;
+    right: 44px;
+    font-family: var(--mono);
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--text-2);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .title .num   { color: var(--accent); }
+  .title .slash { color: var(--faint); font-weight: 400; }
+  .title .name  { color: var(--text-2); }
+  .title .sub   {
+    font-family: var(--sans);
+    font-size: 18px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--muted);
+    margin-left: 4px;
+  }
+  .title .icon {
+    width: 38px; height: 38px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .subtitle {
+    position: absolute;
+    top: 116px; left: 44px;
+    right: 44px;
+    font-family: var(--sans);
+    font-size: 16px;
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  /* ─────────────────────────────────────────────
+     SECTION LABEL (eyebrow with cyan dot)
+     ───────────────────────────────────────────── */
+  .eyebrow {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .eyebrow.no-dot::before { display: none; }
+
+  /* ─────────────────────────────────────────────
+     CODE WINDOW — IDE-style traffic-light header
+     ───────────────────────────────────────────── */
+  .code-window {
+    background: var(--panel);
+    border: 1px solid var(--border-2);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+  .code-window > .head {
+    background: var(--panel-2);
+    border-bottom: 1px solid var(--border-2);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .code-window > .head .dots { display: flex; gap: 7px; }
+  .code-window > .head .dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+  }
+  .code-window > .head .dot.r { background: #FF5F56; }
+  .code-window > .head .dot.y { background: #FFBD2E; }
+  .code-window > .head .dot.g { background: #27C93F; }
+  .code-window > .head .file {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    margin-left: 6px;
+  }
+  .code-window > pre {
+    margin: 0;
+    padding: 18px 22px;
+    font-family: var(--mono);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text);
+    white-space: pre;
+    overflow: visible;
+    tab-size: 4;
+  }
+  .code-window > pre.tight { font-size: 15px; line-height: 1.55; }
+  .code-window > pre.tighter { font-size: 14px; line-height: 1.5; }
+
+  /* syntax tokens */
+  .kw  { color: var(--tok-kw); font-weight: 600; }
+  .str { color: var(--tok-str); }
+  .num { color: var(--tok-num); }
+  .com { color: var(--tok-com); font-style: italic; }
+  .bi  { color: var(--tok-bi); }
+  .var { color: var(--tok-var); }
+  .op  { color: var(--text); }
+  .ac  { color: var(--accent); }
+
+  /* ─────────────────────────────────────────────
+     PANEL — flat-style content card
+     ───────────────────────────────────────────── */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 22px;
+  }
+  .panel.accent {
+    position: relative;
+    padding-left: 26px;
+  }
+  .panel.accent::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--accent);
+  }
+
+  /* ─────────────────────────────────────────────
+     BULLET LIST (custom triangle marker)
+     ───────────────────────────────────────────── */
+  .bul {
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 17px;
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .bul li {
+    position: relative;
+    padding: 6px 0 6px 22px;
+  }
+  .bul li::before {
+    content: "▸";
+    position: absolute;
+    left: 0; top: 6px;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  .bul.muted li { color: var(--muted); }
+  .bul.muted li::before { color: var(--dim); }
+  .bul.bold li { font-weight: 500; }
+
+  /* ─────────────────────────────────────────────
+     SLIDE 1 — TITLE
+     ───────────────────────────────────────────── */
+  .s1 .top-meta {
+    position: absolute;
+    top: 76px; left: 80px;
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: 0.32em;
+    color: var(--muted);
+  }
+  .s1 .top-meta .m { color: var(--accent); font-weight: 700; }
+  .s1 .top-meta .sep { color: var(--faint); margin: 0 14px; }
+
+  .s1 .prompt {
+    position: absolute;
+    top: 134px; left: 80px;
+    font-family: var(--mono);
+    font-size: 22px;
+    font-style: italic;
+    color: var(--dim);
+  }
+
+  .s1 h1 {
+    position: absolute;
+    top: 188px; left: 80px;
+    font-family: var(--mono);
+    font-size: 124px;
+    font-weight: 700;
+    color: var(--text-2);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .s1 .topics {
+    position: absolute;
+    top: 350px; left: 80px;
+    font-family: var(--sans);
+    font-size: 22px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .s1 .topics .dot { color: var(--accent); font-weight: 700; }
+
+  .s1 .divider {
+    position: absolute;
+    top: 416px; left: 80px;
+    width: 80px; height: 4px;
+    background: var(--accent);
+  }
+
+  .s1 .course {
+    position: absolute;
+    top: 446px; left: 80px;
+    font-family: var(--sans);
+    font-size: 26px;
+    font-style: italic;
+    color: var(--text);
+  }
+  .s1 .meta-line {
+    position: absolute;
+    top: 488px; left: 80px;
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .s1 .meta-line .sep { color: var(--faint); margin: 0 14px; }
+
+  .s1 .today-line {
+    position: absolute;
+    bottom: 60px; left: 80px;
+    font-family: var(--mono);
+    font-size: 16px;
+    color: var(--text);
+  }
+  .s1 .today-line .com { color: var(--tok-com); font-style: italic; }
+  .s1 .today-line .ac { color: var(--accent); }
+  .s1 .today-line .label { color: var(--muted); font-style: italic; }
+  .s1 .today-line .sep { color: var(--faint); margin: 0 14px; }
+
+  /* Decorative IDE tag bottom-right */
+  .s1 .deco {
+    position: absolute;
+    bottom: 110px; right: 80px;
+    width: 280px; height: 110px;
+    background: rgba(0, 212, 255, 0.06);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .s1 .deco .tag {
+    background: var(--accent);
+    color: var(--bg);
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ─────────────────────────────────────────────
+     SLIDE 2 — Recap → Today
+     ───────────────────────────────────────────── */
+  .s2 .col-wrap {
+    position: absolute;
+    top: 180px; left: 60px; right: 60px;
+    height: 380px;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 40px;
+  }
+  .s2 .col-wrap .vsep {
+    background: var(--border-2);
+  }
+  .s2 .col h3 {
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-2);
+  }
+  .s2 .col .bul {
+    margin-top: 26px;
+    font-size: 18px;
+  }
+  .s2 .col.today .bul li { color: var(--text); font-weight: 500; }
+  .s2 .why-strip {
+    position: absolute;
+    left: 60px; right: 60px; bottom: 70px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .s2 .why-strip .ic {
+    width: 32px; height: 32px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .s2 .why-strip .txt {
+    font-family: var(--sans);
+    font-size: 17px;
+    color: var(--text);
+  }
+  .s2 .why-strip .txt .lead {
+    font-family: var(--mono);
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .s2 .why-strip .txt code {
+    font-family: var(--mono);
+    color: var(--text-2);
+    font-weight: 700;
+  }
+
+  /* ─────────────────────────────────────────────
+     SLIDE 3 — overview table
+     ───────────────────────────────────────────── */
+  .s3 table {
+    position: absolute;
+    top: 168px; left: 60px; right: 60px;
+    border-collapse: collapse;
+    width: calc(100% - 120px);
+    font-family: var(--sans);
+    font-size: 17px;
+  }
+  .s3 thead th {
+    background: var(--panel-2);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 15px;
+    text-align: left;
+    padding: 14px 18px;
+    border: 1px solid var(--border-2);
+    letter-spacing: 0.02em;
+  }
+  .s3 tbody td {
+    background: var(--panel);
+    color: var(--text);
+    padding: 14px 18px;
+    border: 1px solid var(--border-2);
+    vertical-align: middle;
+  }
+  .s3 tbody td.code  { font-family: var(--mono); font-weight: 700; color: var(--text-2); }
+  .s3 tbody td.codeg { font-family: var(--mono); color: var(--tok-str); }
+  .s3 tbody td.yes-ac { color: var(--accent); font-weight: 700; }
+  .s3 tbody td.no-ac  { color: var(--tok-var); font-weight: 700; }
+  .s3 tbody td.dim    { color: var(--muted); }
+  .s3 .note {
+    position: absolute;
+    bottom: 88px; left: 60px;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .s3 .note .hash { color: var(--tok-com); }
+
+  /* ─────────────────────────────────────────────
+     SLIDE 4–7 — type detail layouts (code + 2 panels)
+     ───────────────────────────────────────────── */
+  .type-slide .code-window {
+    position: absolute;
+    top: 168px; left: 60px;
+    width: 720px;
+    height: 484px;
+  }
+  .type-slide .right-col {
+    position: absolute;
+    top: 168px; left: 800px; right: 60px;
+  }
+  .type-slide .right-col .eyebrow { margin-bottom: 14px; }
+  .type-slide .right-col .bul { margin-bottom: 28px; font-size: 17px; }
+  .type-slide .right-col .panel { padding: 16px 20px; }
+  .type-slide .right-col .panel .eyebrow { margin-bottom: 10px; }
+
+  /* Method chip grid for slide 4 */
+  .methods-grid { display: grid; gap: 8px; font-family: var(--mono); font-size: 15px; }
+  .methods-grid .row { display: flex; gap: 14px; align-items: baseline; }
+  .methods-grid .m { color: var(--accent); font-weight: 700; min-width: 110px; }
+  .methods-grid .d { color: var(--muted); font-style: italic; font-family: var(--sans); font-size: 14px; }
+
+  /* Mental-model panel (slide 5) */
+  .mm-block { margin-bottom: 14px; }
+  .mm-block:last-child { margin-bottom: 0; }
+  .mm-block .lead {
+    font-family: var(--mono); font-weight: 700;
+    color: var(--accent);
+  }
+  .mm-block .desc { font-family: var(--sans); font-size: 16px; color: var(--text); }
+  .mm-block .sub { font-family: var(--sans); font-size: 14px; color: var(--muted); font-style: italic; margin-top: 2px; }
+
+  /* O(1) callout (slide 6) */
+  .o1-callout { font-size: 17px; line-height: 1.55; color: var(--text); }
+  .o1-callout code { font-family: var(--mono); color: var(--accent); font-weight: 700; }
+  .o1-callout strong { color: var(--text-2); font-weight: 700; }
+
+  /* ─────────────────────────────────────────────
+     SLIDE 8 & 9 — comprehensions
+     ───────────────────────────────────────────── */
+  .syntax-bar {
+    position: absolute;
+    top: 168px; left: 60px; right: 60px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .syntax-bar .lbl {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.22em;
+  }
+  .syntax-bar .pattern {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--text);
+  }
+  .syntax-bar .pattern .ph { font-weight: 700; }
+  .syntax-bar .pattern .ph.expr { color: var(--tok-str); }
+  .syntax-bar .pattern .ph.iter { color: var(--tok-bi); }
+  .syntax-bar .pattern .ph.cond { color: var(--tok-num); }
+  .syntax-bar .pattern .ph.item { color: var(--tok-var); }
+  .syntax-bar .pattern .kw { color: var(--tok-kw); }
+  .syntax-bar .hint {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--tok-com);
+    font-style: italic;
+  }
+
+  /* Comparison columns for slide 8 */
+  .compare-cols {
+    position: absolute;
+    top: 280px; left: 60px; right: 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+  .compare-cols .col-wrap > .eyebrow { margin-bottom: 12px; }
+  .compare-cols .code-window { height: 290px; }
+
+  /* Single-window for slide 9 */
+  .single-window {
+    position: absolute;
+    top: 280px; left: 60px; right: 60px;
+    height: 340px;
+  }
+
+  /* ─────────────────────────────────────────────
+     SLIDE 10 — modules & imports (code left, 3 cards right)
+     ───────────────────────────────────────────── */
+  .s10 .code-window {
+    position: absolute;
+    top: 168px; left: 60px;
+    width: 720px; height: 484px;
+  }
+  .s10 .cards {
+    position: absolute;
+    top: 168px; left: 800px; right: 60px;
+    display: flex; flex-direction: column;
+    gap: 16px;
+  }
+  .s10 .cards .eyebrow { margin-bottom: 14px; }
+  .s10 .cards .panel { padding: 14px 18px; }
+  .s10 .cards .panel .h {
+    font-family: var(--mono);
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 17px;
+  }
+  .s10 .cards .panel .h .sub {
+    color: var(--muted);
+    font-style: italic;
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 14px;
+    margin-left: 8px;
+  }
+  .s10 .cards .panel .e {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text);
+    margin-top: 6px;
+    line-height: 1.55;
+  }
+
+  /* ─────────────────────────────────────────────
+     SLIDE 11 — file I/O (two columns)
+     ───────────────────────────────────────────── */
+  .s11 .col-wrap {
+    position: absolute;
+    top: 168px; left: 60px; right: 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+  .s11 .col-wrap .eyebrow { margin-bottom: 14px; }
+  .s11 .col-wrap .code-window { height: 450px; }
+
+  /* ─────────────────────────────────────────────
+     SLIDE 12 — lab brief (code + 3 task cards)
+     ───────────────────────────────────────────── */
+  .s12 .code-window {
+    position: absolute;
+    top: 198px; left: 60px;
+    width: 680px; height: 470px;
+  }
+  .s12 .tasks {
+    position: absolute;
+    top: 198px; left: 760px; right: 60px;
+    display: flex; flex-direction: column;
+    gap: 12px;
+  }
+  .s12 .tasks .eyebrow { margin-bottom: 6px; }
+  .s12 .task {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+  .s12 .task .head {
+    display: flex; align-items: center;
+    gap: 14px;
+    margin-bottom: 6px;
+  }
+  .s12 .task .n {
+    font-family: var(--mono);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .s12 .task .t {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-2);
+  }
+  .s12 .task .d {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ─────────────────────────────────────────────
+     SLIDE 13 — lab walkthrough (three stacked solutions)
+     ───────────────────────────────────────────── */
+  .s13 .sol {
+    position: absolute;
+    left: 60px; right: 60px;
+  }
+  .s13 .sol .eyebrow { margin-bottom: 8px; font-size: 12px; }
+  .s13 .sol .line {
+    background: var(--panel);
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    padding: 14px 20px;
+    font-family: var(--mono);
+    font-size: 17px;
+    color: var(--text);
+  }
+  .s13 .sol .line.multi { padding: 14px 20px; }
+  .s13 .sol .line.multi pre {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text);
+    white-space: pre;
+  }
+
+  .s13 .s1pos { top: 162px; }
+  .s13 .s2pos { top: 282px; }
+  .s13 .s3pos { top: 402px; }
+
+  /* ─────────────────────────────────────────────
+     SLIDE 14 — wrap & next
+     ───────────────────────────────────────────── */
+  .s14 .checklist {
+    position: absolute;
+    top: 168px; left: 60px;
+    width: 540px;
+  }
+  .s14 .checklist .eyebrow { margin-bottom: 18px; }
+  .s14 .check-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0;
+    font-family: var(--sans);
+    font-size: 17px;
+    color: var(--text);
+  }
+  .s14 .check-item .check-ic {
+    width: 22px; height: 22px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .s14 .right-col {
+    position: absolute;
+    top: 168px; left: 670px; right: 60px;
+    display: flex; flex-direction: column;
+    gap: 22px;
+  }
+  .s14 .right-col .eyebrow { margin-bottom: 12px; }
+  .s14 .right-col .panel.accent {
+    padding: 16px 22px 16px 28px;
+  }
+  .s14 .right-col .panel .h {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--text-2);
+  }
+  .s14 .right-col .panel .h .ic {
+    width: 22px; height: 22px;
+    color: var(--accent);
+  }
+  .s14 .right-col .panel .desc {
+    margin-top: 10px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .s14 .commit-block {
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .s14 .commit-block .pp { color: var(--accent); font-weight: 700; }
+  .s14 .commit-block .note {
+    margin-top: 6px;
+    color: var(--tok-com);
+    font-style: italic;
+  }
+
+  /* ─────────────────────────────────────────────
+     OVERLAY UI — page indicator, hint, help
+     ───────────────────────────────────────────── */
+  #ui {
+    position: fixed;
+    bottom: 12px; right: 16px;
+    display: flex; gap: 12px; align-items: center;
+    z-index: 100;
+    pointer-events: none;
+  }
+  #ui .pill {
+    background: rgba(15, 15, 26, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-2);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  #ui .pill .ac { color: var(--accent); font-weight: 700; }
+
+  #help {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 15, 0.92);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    color: var(--text);
+    font-family: var(--mono);
+  }
+  #help.show { display: flex; }
+  #help .box {
+    background: var(--panel);
+    border: 1px solid var(--border-2);
+    border-radius: 12px;
+    padding: 32px 44px;
+    font-size: 14px;
+    line-height: 2;
+  }
+  #help .box h3 {
+    color: var(--accent);
+    font-size: 15px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  #help .box kbd {
+    background: var(--panel-2);
+    border: 1px solid var(--border-2);
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-right: 10px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 1 — TITLE
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide s1 active">
+    <div class="top-meta">
+      <span class="m">MODULE 01</span>
+      <span class="sep">·</span>
+      <span>DAY 03 OF 40</span>
+      <span class="sep">·</span>
+      <span>WEEK 1</span>
+    </div>
+
+    <div class="prompt">&gt; <em>python_essentials_II.py</em></div>
+
+    <h1>Collections</h1>
+
+    <div class="topics">
+      <span>Lists</span><span class="dot">·</span>
+      <span>Tuples</span><span class="dot">·</span>
+      <span>Dicts</span><span class="dot">·</span>
+      <span>Sets</span><span class="dot">·</span>
+      <span>Comprehensions</span><span class="dot">·</span>
+      <span>Modules</span><span class="dot">·</span>
+      <span>File I/O</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="course"><em>From Bits to Blockchain</em></div>
+    <div class="meta-line">
+      <span>MSBTE 315004</span>
+      <span class="sep">·</span>
+      <span>Semester 5</span>
+      <span class="sep">·</span>
+      <span>Final Year Diploma in Computer Science</span>
+    </div>
+
+    <div class="today-line">
+      <span class="com"># </span>
+      <span class="label">today:</span>
+      <span class="ac"> 1h lecture</span>
+      <span> + </span>
+      <span class="ac">1h lab</span>
+      <span class="sep">·</span>
+      <span class="label">goal:</span>
+      <span> comprehensions over a transactions dataset</span>
+    </div>
+
+    <div class="deco"><div class="tag">collections.py</div></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 2 — RECAP → TODAY
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide s2">
+    <div class="crumb"><span class="c-mod">M1</span><span class="sep">·</span><span>DAY 03</span><span class="sep">·</span><span>Recap → Today</span></div>
+    <div class="pageno"><span class="cur">02</span><span class="sep">/</span><span>14</span></div>
+
+    <div class="title">
+      <span class="num">02</span>
+      <span class="slash">//</span>
+      <span class="name">Where we left off → where we're going</span>
+    </div>
+
+    <div class="col-wrap">
+      <div class="col yesterday">
+        <div class="eyebrow">Yesterday · Day 02</div>
+        <h3>Python Essentials I</h3>
+        <ul class="bul muted">
+          <li>variables and core types</li>
+          <li>f-strings &amp; string methods</li>
+          <li>if / elif / else, for, while</li>
+          <li>functions, parameters, return</li>
+        </ul>
+      </div>
+
+      <div class="vsep"></div>
+
+      <div class="col today">
+        <div class="eyebrow">Today · Day 03</div>
+        <h3>Python Essentials II</h3>
+        <ul class="bul bold">
+          <li>the four collection types</li>
+          <li>list &amp; dict comprehensions</li>
+          <li>modules and the import system</li>
+          <li>reading and writing files</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="why-strip">
+      <svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+      <div class="txt">
+        <span class="lead">Why these matter:</span>
+        every blockchain dataset you'll touch — blocks, transactions, balances, events — lives in <code>lists of dicts</code>.
+      </div>
+    </div>
+
+    <div class="footer"><em>From Bits to Blockchain</em><span class="sep">·</span>Python Essentials II</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 3 — THE FOUR COLLECTIONS (TABLE)
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide s3">
+    <div class="crumb"><span class="c-mod">M1</span><span class="sep">·</span><span>DAY 03</span><span class="sep">·</span><span>Overview</span></div>
+    <div class="pageno"><span class="cur">03</span><span class="sep">/</span><span>14</span></div>
+
+    <div class="title">
+      <span class="num">03</span><span class="slash">//</span><span class="name">The four collections</span>
+    </div>
+    <div class="subtitle">One table, four mental models. Pick the right tool for the job.</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th><th>Syntax</th><th>Ordered?</th>
+          <th>Mutable?</th><th>Duplicates?</th><th>Use it for…</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="code">list</td>
+          <td class="codeg">[1, 2, 3]</td>
+          <td>yes</td>
+          <td class="yes-ac">yes</td>
+          <td>yes</td>
+          <td>ordered sequences you'll modify</td>
+        </tr>
+        <tr>
+          <td class="code">tuple</td>
+          <td class="codeg">(1, 2, 3)</td>
+          <td>yes</td>
+          <td class="no-ac">no</td>
+          <td>yes</td>
+          <td>fixed records, function returns</td>
+        </tr>
+        <tr>
+          <td class="code">dict</td>
+          <td class="codeg">{"k": v}</td>
+          <td>yes</td>
+          <td class="yes-ac">yes</td>
+          <td class="dim">keys: no</td>
+          <td>key → value lookups (O(1))</td>
+        </tr>
+        <tr>
+          <td class="code">set</td>
+          <td class="codeg">{1, 2, 3}</td>
+          <td class="no-ac">no</td>
+          <td class="yes-ac">yes</td>
+          <td class="no-ac">no</td>
+          <td>uniqueness &amp; membership tests</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note"><span class="hash">#</span> ordered in Python 3.7+; in dicts that means insertion order is preserved</div>
+
+    <div class="footer"><em>From Bits to Blockchain</em><span class="sep">·</span>Python Essentials II</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 4 — LISTS
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide type-slide s4">
+    <div class="crumb"><span class="c-mod">M1</span><span class="sep">·</span><span>DAY 03</span><span class="sep">·</span><span>Lists</span></div>
+    <div class="pageno"><span class="cur">04</span><span class="sep">/</span><span>14</span></div>
+
+    <div class="title">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h2v2H3V4zm4 0h14v2H7V4zM3 11h2v2H3v-2zm4 0h14v2H7v-2zM3 18h2v2H3v-2zm4 0h14v2H7v-2z"/></svg>
+      <span class="num">04</span><span class="slash">//</span><span class="name">Lists</span>
+      <span class="sub">— ordered, mutable, your everyday workhorse</span>
+    </div>
+
+    <div class="code-window">
+      <div class="head">
+        <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <div class="file">lists_demo.py</div>
+      </div>
+<pre><span class="com"># block #4521 transaction hashes</span>
+<span class="var">tx_hashes</span> = [<span class="str">"0xab12"</span>, <span class="str">"0xcd34"</span>, <span class="str">"0xef56"</span>]
+
+<span class="var">tx_hashes</span>.append(<span class="str">"0x7890"</span>)     <span class="com"># add at end</span>
+<span class="var">tx_hashes</span>[<span class="num">0</span>]                  <span class="com"># index → '0xab12'</span>
+<span class="var">tx_hashes</span>[-<span class="num">1</span>]                 <span class="com"># last  → '0x7890'</span>
+<span class="var">tx_hashes</span>[<span class="num">1</span>:<span class="num">3</span>]                <span class="com"># slice</span>
+<span class="bi">len</span>(<span class="var">tx_hashes</span>)             <span class="com"># count</span>
+
+<span class="com"># loop over them</span>
+<span class="kw">for</span> h <span class="kw">in</span> <span class="var">tx_hashes</span>:
+    <span class="bi">print</span>(h)</pre>
+    </div>
+
+    <div class="right-col">
+      <div class="eyebrow">When to reach for a list</div>
+      <ul class="bul">
+        <li>order matters</li>
+        <li>you'll add, remove, or sort items</li>
+        <li>duplicates are fine</li>
+        <li>you index by position, not name</li>
+      </ul>
+
+      <div class="panel">
+        <div class="eyebrow">Common methods</div>
+        <div class="methods-grid">
+          <div class="row"><span class="m">.append(x)</span><span class="d">add to end</span></div>
+          <div class="row"><span class="m">.pop()</span><span class="d">remove last</span></div>
+          <div class="row"><span class="m">.sort()</span><span class="d">sort in place</span></div>
+          <div class="row"><span class="m">.reverse()</span><span class="d">flip order</span></div>
+          <div class="row"><span class="m">in</span><span class="d">membership test</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer"><em>From Bits to Blockchain</em><span class="sep">·</span>Python Essentials II</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 5 — TUPLES
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide type-slide s5">
+    <div class="crumb"><span class="c-mod">M1</span><span class="sep">·</span><span>DAY 03</span><span class="sep">·</span><span>Tuples</span></div>
+    <div class="pageno"><span class="cur">05</span><span class="sep">/</span><span>14</span></div>
+
+    <div class="title">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1a5 5 0 00-5 5v3H6a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V11a2 2 0 00-2-2h-1V6a5 5 0 00-5-5zm0 2a3 3 0 013 3v3H9V6a3 3 0 013-3zm0 11a2 2 0 11-.001 4 2 2 0 010-4z"/></svg>
+      <span class="num">05</span><span class="slash">//</span><span class="name">Tuples</span>
+      <span class="sub">— ordered, immutable, fixed-shape records</span>
+    </div>
+
+    <div class="code-window">
+      <div class="head">
+        <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <div class="file">tuples_demo.py</div>
+      </div>
+<pre><span class="com"># (sender, receiver, amount)</span>
+<span class="var">tx</span> = (<span class="str">"alice"</span>, <span class="str">"bob"</span>, <span class="num">12.5</span>)
+
+<span class="com"># unpacking — Pythonic &amp; clean</span>
+<span class="var">sender, receiver, amount</span> = <span class="var">tx</span>
+
+<span class="com"># functions can return many values</span>
+<span class="kw">def</span> <span class="bi">min_max</span>(values):
+    <span class="kw">return</span> <span class="bi">min</span>(values), <span class="bi">max</span>(values)
+
+<span class="var">lo, hi</span> = <span class="bi">min_max</span>([<span class="num">3</span>, <span class="num">9</span>, <span class="num">1</span>])
+
+<span class="var">tx</span>[<span class="num">0</span>] = <span class="str">"eve"</span>   <span class="var"># TypeError!</span></pre>
+    </div>
+
+    <div class="right-col">
+      <div class="eyebrow">Why immutable helps</div>
+      <ul class="bul">
+        <li>shape is locked — fewer bugs</li>
+        <li>safe as dict keys</li>
+        <li>function returns: many at once</li>
+        <li>slightly faster than lists</li>
+      </ul>
+
+      <div class="panel accent">
+        <div class="eyebrow no-dot" style="margin-bottom: 12px;">Mental model</div>
+        <div class="mm-block">
+          <span class="lead">list</span>
+          <span class="desc">= a shopping cart</span>
+          <div class="sub">you keep adding &amp; removing</div>
+        </div>
+        <div class="mm-block">
+          <span class="lead">tuple</span>
+          <span class="desc">= a printed receipt</span>
+          <div class="sub">the record is finalized</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer"><em>From Bits to Blockchain</em><span class="sep">·</span>Python Essentials II</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 6 — DICTIONARIES
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide type-slide s6">
+    <div class="crumb"><span class="c-mod">M1</span><span class="sep">·</span><span>DAY 03</span><span class="sep">·</span><span>Dictionaries</span></div>
+    <div class="pageno"><span class="cur">06</span><span class="sep">/</span><span>14</span></div>
+
+    <div class="title">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M7 14a3 3 0 100-6 3 3 0 000 6zm3.5-3a4.5 4.5 0 11-1.94-3.71l3.4-3.4a1 1 0 011.41 0l2.83 2.83a1 1 0 010 1.41l-1.42 1.42 1.42 1.41a1 1 0 010 1.42l-1.42 1.41 1.42 1.42a1 1 0 010 1.41l-2.13 2.12a1 1 0 01-1.41 0L7.86 12.62A4.5 4.5 0 0110.5 11z"/></svg>
+      <span class="num">06</span><span class="slash">//</span><span class="name">Dictionaries</span>
+      <span class="sub">— key → value, the JSON of Python</span>
+    </div>
+
+    <div class="code-window">
+      <div class="head">
+        <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <div class="file">dicts_demo.py</div>
+      </div>
+<pre class="tight"><span class="com"># one transaction as a dict — the shape</span>
+<span class="com"># of every record on every blockchain</span>
+<span class="var">tx</span> = {
+    <span class="str">"sender"</span>:   <span class="str">"alice"</span>,
+    <span class="str">"receiver"</span>: <span class="str">"bob"</span>,
+    <span class="str">"amount"</span>:   <span class="num">150.0</span>,
+    <span class="str">"fee"</span>:      <span class="num">0.01</span>,
+}
+
+<span class="var">tx</span>[<span class="str">"amount"</span>]                  <span class="com"># 150.0</span>
+<span class="var">tx</span>.get(<span class="str">"memo"</span>, <span class="str">""</span>)            <span class="com"># safe default</span>
+<span class="var">tx</span>[<span class="str">"confirmed"</span>] = <span class="kw">True</span>
+<span class="var">tx</span>.keys();  <span class="var">tx</span>.values()</pre>
+    </div>
+
+    <div class="right-col">
+      <div class="eyebrow">Why dicts are fast</div>
+      <div class="o1-callout">
+        Lookup by key is <code>O(1)</code> — the same speed whether you have 10 items or 10 million.
+        <br><br>
+        That's why <strong>every</strong> blockchain RPC returns dicts.
+      </div>
+
+      <div style="margin-top: 28px;">
+        <div class="eyebrow" style="margin-bottom: 12px;">Iterate over a dict</div>
+        <div class="panel">
+<pre style="font-family: var(--mono); font-size: 15px; line-height: 1.6; color: var(--text); margin: 0;"><span class="kw">for</span> k, v <span class="kw">in</span> tx.items():
+    <span class="bi">print</span>(k, <span class="str">"->"</span>, v)</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer"><em>From Bits to Blockchain</em><span class="sep">·</span>Python Essentials II</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 7 — SETS
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide type-slide s7">
+    <div class="crumb"><span class="c-mod">M1</span><span class="sep">·</span><span>DAY 03</span><span class="sep">·</span><span>Sets</span></div>
+    <div class="pageno"><span class="cur">07</span><span class="sep">/</span><span>14</span></div>
+
+    <div class="title">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <span class="num">07</span><span class="slash">//</span><span class="name">Sets</span>
+      <span class="sub">— unique items, fast membership tests</span>
+    </div>
+
+    <div class="code-window">
+      <div class="head">
+        <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <div class="file">sets_demo.py</div>
+      </div>
+<pre><span class="com"># every sender who appeared in block #4521</span>
+<span class="var">senders</span> = [<span class="str">"alice"</span>, <span class="str">"bob"</span>, <span class="str">"alice"</span>, <span class="str">"eve"</span>]
+
+<span class="var">unique</span> = <span class="bi">set</span>(<span class="var">senders</span>)    <span class="com"># {'alice', 'bob', 'eve'}</span>
+
+<span class="com"># blazing-fast membership test — O(1)</span>
+<span class="str">"bob"</span> <span class="kw">in</span> <span class="var">unique</span>           <span class="com"># True</span>
+
+<span class="com"># set algebra works as math</span>
+<span class="var">block_a</span> = {<span class="str">"alice"</span>, <span class="str">"bob"</span>}
+<span class="var">block_b</span> = {<span class="str">"bob"</span>, <span class="str">"eve"</span>}
+<span class="var">block_a</span> | <span class="var">block_b</span>         <span class="com"># union</span>
+<span class="var">block_a</span> &amp; <span class="var">block_b</span>         <span class="com"># intersection → {'bob'}</span></pre>
+    </div>
+
+    <div class="right-col">
+      <div class="eyebrow">Reach for a set when…</div>
+      <ul class="bul">
+        <li>you need to dedupe a list</li>
+        <li>you check membership often</li>
+        <li>you do union / intersection</li>
+        <li>order genuinely doesn't matter</li>
+      </ul>
+
+      <div class="panel accent">
+        <div class="eyebrow no-dot" style="margin-bottom: 12px;">On-chain use</div>
+        <div style="font-family: var(--sans); font-size: 17px; color: var(--text); line-height: 1.55;">
+          <strong style="color: var(--text-2); font-weight: 700;">Daily Active Addresses</strong>
+          is just
+          <code style="font-family: var(--mono); color: var(--accent); font-weight: 700;">len(set(senders))</code>
+          across a day's blocks.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer"><em>From Bits to Blockchain</em><span class="sep">·</span>Python Essentials II</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 8 — LIST COMPREHENSIONS
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide s8">
+    <div class="crumb"><span class="c-mod">M1</span><span class="sep">·</span><span>DAY 03</span><span class="sep">·</span><span>List Comprehensions</span></div>
+    <div class="pageno"><span class="cur">08</span><span class="sep">/</span><span>14</span></div>
+
+    <div class="title">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+      <span class="num">08</span><span class="slash">//</span><span class="name">List comprehensions</span>
+      <span class="sub">— the Pythonic for-loop</span>
+    </div>
+
+    <div class="syntax-bar">
+      <div class="lbl">SYNTAX</div>
+      <div class="pattern">
+        [&nbsp;<span class="ph expr">expression</span>&nbsp;&nbsp;<span class="kw">for</span>&nbsp;<span class="ph item">item</span>&nbsp;<span class="kw">in</span>&nbsp;<span class="ph iter">iterable</span>&nbsp;&nbsp;<span class="kw">if</span>&nbsp;<span class="ph cond">condition</span>&nbsp;]
+      </div>
+      <div class="hint"># the if-clause is optional</div>
+    </div>
+
+    <div class="compare-cols">
+      <div class="col-wrap">
+        <div class="eyebrow">Before · the long way</div>
+        <div class="code-window">
+          <div class="head">
+            <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+            <div class="file">loop.py</div>
+          </div>
+<pre class="tight"><span class="var">amounts</span> = [<span class="num">12</span>, <span class="num">200</span>, <span class="num">8</span>, <span class="num">450</span>, <span class="num">75</span>]
+<span class="var">big</span> = []
+<span class="kw">for</span> a <span class="kw">in</span> <span class="var">amounts</span>:
+    <span class="kw">if</span> a &gt; <span class="num">100</span>:
+        <span class="var">big</span>.append(a)
+
+<span class="com"># 5 lines, mutable accumulator</span></pre>
+        </div>
+      </div>
+
+      <div class="col-wrap">
+        <div class="eyebrow">After · the comprehension</div>
+        <div class="code-window">
+          <div class="head">
+            <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+            <div class="file">comp.py</div>
+          </div>
+<pre class="tight"><span class="var">amounts</span> = [<span class="num">12</span>, <span class="num">200</span>, <span class="num">8</span>, <span class="num">450</span>, <span class="num">75</span>]
+
+<span class="var">big</span> = [a <span class="kw">for</span> a <span class="kw">in</span> <span class="var">amounts</span> <span class="kw">if</span> a &gt; <span class="num">100</span>]
+
+<span class="com"># 1 line, no accumulator</span>
+<span class="com"># → [200, 450]</span>
+
+<span class="com"># transform too — fees in paise</span>
+<span class="var">paise</span> = [a * <span class="num">100</span> <span class="kw">for</span> a <span class="kw">in</span> <span class="var">amounts</span>]</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer"><em>From Bits to Blockchain</em><span class="sep">·</span>Python Essentials II</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 9 — DICT COMPREHENSIONS
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide s9">
+    <div class="crumb"><span class="c-mod">M1</span><span class="sep">·</span><span>DAY 03</span><span class="sep">·</span><span>Dict Comprehensions</span></div>
+    <div class="pageno"><span class="cur">09</span><span class="sep">/</span><span>14</span></div>
+
+    <div class="title">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+      <span class="num">09</span><span class="slash">//</span><span class="name">Dict comprehensions</span>
+      <span class="sub">— build maps in one expression</span>
+    </div>
+
+    <div class="syntax-bar">
+      <div class="lbl">SYNTAX</div>
+      <div class="pattern">
+        {&nbsp;<span class="ph expr">key_expr</span>&nbsp;:&nbsp;<span class="ph expr">value_expr</span>&nbsp;&nbsp;<span class="kw">for</span>&nbsp;<span class="ph item">item</span>&nbsp;<span class="kw">in</span>&nbsp;<span class="ph iter">iterable</span>&nbsp;}
+      </div>
+      <div class="hint"># also works with if-clauses</div>
+    </div>
+
+    <div class="single-window">
+      <div class="code-window" style="height: 100%;">
+        <div class="head">
+          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+          <div class="file">dict_comp.py</div>
+        </div>
+<pre><span class="com"># list of tickers we follow</span>
+<span class="var">tickers</span> = [<span class="str">"BTC"</span>, <span class="str">"ETH"</span>, <span class="str">"DOT"</span>, <span class="str">"SOL"</span>]
+<span class="var">prices</span>  = [<span class="num">67000</span>, <span class="num">3400</span>, <span class="num">7.2</span>, <span class="num">145</span>]
+
+<span class="com"># zip + dict comprehension → ticker -> price</span>
+<span class="var">book</span> = {t: p <span class="kw">for</span> t, p <span class="kw">in</span> <span class="bi">zip</span>(<span class="var">tickers</span>, <span class="var">prices</span>)}
+<span class="com"># {'BTC': 67000, 'ETH': 3400, 'DOT': 7.2, 'SOL': 145}</span>
+
+<span class="com"># only the large-caps (price &gt; 100)</span>
+<span class="var">large</span> = {t: p <span class="kw">for</span> t, p <span class="kw">in</span> <span class="var">book</span>.items() <span class="kw">if</span> p &gt; <span class="num">100</span>}</pre>
+      </div>
+    </div>
+
+    <div class="footer"><em>From Bits to Blockchain</em><span class="sep">·</span>Python Essentials II</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 10 — MODULES & IMPORTS
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide s10">
+    <div class="crumb"><span class="c-mod">M1</span><span class="sep">·</span><span>DAY 03</span><span class="sep">·</span><span>Modules &amp; Imports</span></div>
+    <div class="pageno"><span class="cur">10</span><span class="sep">/</span><span>14</span></div>
+
+    <div class="title">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 01-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 010-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>
+      <span class="num">10</span><span class="slash">//</span><span class="name">Modules &amp; imports</span>
+      <span class="sub">— borrow superpowers in one line</span>
+    </div>
+
+    <div class="code-window">
+      <div class="head">
+        <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <div class="file">imports_demo.py</div>
+      </div>
+<pre class="tight"><span class="com"># 1. import the whole module</span>
+<span class="kw">import</span> <span class="bi">hashlib</span>
+<span class="bi">hashlib</span>.sha256(<span class="str">b"hi"</span>).hexdigest()
+
+<span class="com"># 2. import only what you need</span>
+<span class="kw">from</span> <span class="bi">hashlib</span> <span class="kw">import</span> sha256
+sha256(<span class="str">b"hi"</span>).hexdigest()
+
+<span class="com"># 3. give it a nickname</span>
+<span class="kw">import</span> <span class="bi">pandas</span> <span class="kw">as</span> <span class="bi">pd</span>
+<span class="bi">pd</span>.DataFrame([<span class="com">{...}</span>])
+
+<span class="com"># your own file — same syntax</span>
+<span class="kw">from</span> <span class="bi">wallet</span> <span class="kw">import</span> sign_tx</pre>
+    </div>
+
+    <div class="cards">
+      <div class="eyebrow">Where modules come from</div>
+      <div class="panel accent">
+        <div class="h">stdlib <span class="sub">ships with Python</span></div>
+        <div class="e">hashlib, json, os, math, random,<br>datetime, secrets</div>
+      </div>
+      <div class="panel accent">
+        <div class="h">third-party <span class="sub">installed via pip</span></div>
+        <div class="e">pandas, requests, web3, substrate-interface</div>
+      </div>
+      <div class="panel accent">
+        <div class="h">your code <span class="sub">your own .py files</span></div>
+        <div class="e">wallet.py, blockchain.py, utils.py</div>
+      </div>
+    </div>
+
+    <div class="footer"><em>From Bits to Blockchain</em><span class="sep">·</span>Python Essentials II</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 11 — FILE I/O
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide s11">
+    <div class="crumb"><span class="c-mod">M1</span><span class="sep">·</span><span>DAY 03</span><span class="sep">·</span><span>Files</span></div>
+    <div class="pageno"><span class="cur">11</span><span class="sep">/</span><span>14</span></div>
+
+    <div class="title">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z M14 2v6h6 M8 13h8 M8 17h8 M8 9h2"/></svg>
+      <span class="num">11</span><span class="slash">//</span><span class="name">Reading &amp; writing files</span>
+      <span class="sub">— safely, with `with`</span>
+    </div>
+
+    <div class="col-wrap">
+      <div class="col-c">
+        <div class="eyebrow">Text files</div>
+        <div class="code-window">
+          <div class="head">
+            <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+            <div class="file">files_text.py</div>
+          </div>
+<pre class="tight"><span class="com"># write a log line</span>
+<span class="kw">with</span> <span class="bi">open</span>(<span class="str">"chain.log"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:
+    f.write(<span class="str">"block #4521 ok\n"</span>)
+
+<span class="com"># read it back, line by line</span>
+<span class="kw">with</span> <span class="bi">open</span>(<span class="str">"chain.log"</span>) <span class="kw">as</span> f:
+    <span class="kw">for</span> line <span class="kw">in</span> f:
+        <span class="bi">print</span>(line.rstrip())
+
+<span class="com"># 'with' auto-closes the file —</span>
+<span class="com"># even if an exception is raised.</span></pre>
+        </div>
+      </div>
+
+      <div class="col-c">
+        <div class="eyebrow">JSON files</div>
+        <div class="code-window">
+          <div class="head">
+            <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+            <div class="file">files_json.py</div>
+          </div>
+<pre class="tight"><span class="kw">import</span> <span class="bi">json</span>
+
+<span class="var">block</span> = {<span class="str">"number"</span>: <span class="num">4521</span>,
+         <span class="str">"tx_count"</span>: <span class="num">12</span>}
+
+<span class="com"># write JSON</span>
+<span class="kw">with</span> <span class="bi">open</span>(<span class="str">"block.json"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:
+    <span class="bi">json</span>.dump(<span class="var">block</span>, f, indent=<span class="num">2</span>)
+
+<span class="com"># read JSON</span>
+<span class="kw">with</span> <span class="bi">open</span>(<span class="str">"block.json"</span>) <span class="kw">as</span> f:
+    <span class="var">data</span> = <span class="bi">json</span>.load(f)</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer"><em>From Bits to Blockchain</em><span class="sep">·</span>Python Essentials II</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 12 — LAB BRIEF
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide s12">
+    <div class="crumb"><span class="c-mod">M1</span><span class="sep">·</span><span>DAY 03</span><span class="sep">·</span><span>Lab · Brief</span></div>
+    <div class="pageno"><span class="cur">12</span><span class="sep">/</span><span>14</span></div>
+
+    <div class="title">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M10 2v6L4 18a2 2 0 002 3h12a2 2 0 002-3l-6-10V2 M8 2h8 M7 14h10"/></svg>
+      <span class="num">12</span><span class="slash">//</span><span class="name">Lab — transactions, the comprehension way</span>
+    </div>
+    <div class="subtitle">1 hr  ·  no <code style="font-family:var(--mono);color:var(--text-2);">for</code> loops where a comprehension fits</div>
+
+    <div class="code-window">
+      <div class="head">
+        <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <div class="file">transactions.py  ·  starter</div>
+      </div>
+<pre class="tight"><span class="var">transactions</span> = [
+  {<span class="str">"sender"</span>:<span class="str">"alice"</span>, <span class="str">"to"</span>:<span class="str">"bob"</span>,   <span class="str">"amount"</span>:<span class="num">150</span>},
+  {<span class="str">"sender"</span>:<span class="str">"bob"</span>,   <span class="str">"to"</span>:<span class="str">"eve"</span>,   <span class="str">"amount"</span>:<span class="num">50</span>},
+  {<span class="str">"sender"</span>:<span class="str">"alice"</span>, <span class="str">"to"</span>:<span class="str">"eve"</span>,   <span class="str">"amount"</span>:<span class="num">300</span>},
+  {<span class="str">"sender"</span>:<span class="str">"carol"</span>, <span class="str">"to"</span>:<span class="str">"alice"</span>, <span class="str">"amount"</span>:<span class="num">75</span>},
+  {<span class="str">"sender"</span>:<span class="str">"eve"</span>,   <span class="str">"to"</span>:<span class="str">"bob"</span>,   <span class="str">"amount"</span>:<span class="num">210</span>},
+  <span class="com"># …5 more — 10 transactions total</span>
+]</pre>
+    </div>
+
+    <div class="tasks">
+      <div class="eyebrow">Your three tasks</div>
+      <div class="task">
+        <div class="head"><span class="n">01</span><span class="t">Total volume</span></div>
+        <div class="d">Sum every amount across all 10 transactions. One comprehension + <code style="font-family:var(--mono);color:var(--accent);">sum()</code>.</div>
+      </div>
+      <div class="task">
+        <div class="head"><span class="n">02</span><span class="t">Whales only</span></div>
+        <div class="d">List of transactions where <code style="font-family:var(--mono);color:var(--accent);">amount &gt; 100</code>. One list comprehension with an if-clause.</div>
+      </div>
+      <div class="task">
+        <div class="head"><span class="n">03</span><span class="t">Sender ledger</span></div>
+        <div class="d">Build <code style="font-family:var(--mono);color:var(--accent);">{ sender: total_sent }</code> across all transactions. One dict comprehension.</div>
+      </div>
+    </div>
+
+    <div class="footer"><em>From Bits to Blockchain</em><span class="sep">·</span>Python Essentials II</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 13 — LAB WALKTHROUGH
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide s13">
+    <div class="crumb"><span class="c-mod">M1</span><span class="sep">·</span><span>DAY 03</span><span class="sep">·</span><span>Lab · Walkthrough</span></div>
+    <div class="pageno"><span class="cur">13</span><span class="sep">/</span><span>14</span></div>
+
+    <div class="title">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 6"/></svg>
+      <span class="num">13</span><span class="slash">//</span><span class="name">Lab walkthrough — three comprehensions</span>
+    </div>
+    <div class="subtitle" style="color: var(--tok-com); font-family: var(--mono); font-style: italic;"># we'll write all three live, then defaultdict-up #03</div>
+
+    <div class="sol s1pos">
+      <div class="eyebrow">01 · Total volume</div>
+      <div class="line">
+        <span class="var">total</span> = <span class="bi">sum</span>(t[<span class="str">"amount"</span>] <span class="kw">for</span> t <span class="kw">in</span> <span class="var">transactions</span>)
+        <span class="com">&nbsp;&nbsp;&nbsp;# → 785</span>
+      </div>
+    </div>
+
+    <div class="sol s2pos">
+      <div class="eyebrow">02 · Whales only  (amount &gt; 100)</div>
+      <div class="line">
+        <span class="var">whales</span> = [t <span class="kw">for</span> t <span class="kw">in</span> <span class="var">transactions</span> <span class="kw">if</span> t[<span class="str">"amount"</span>] &gt; <span class="num">100</span>]
+      </div>
+    </div>
+
+    <div class="sol s3pos">
+      <div class="eyebrow">03 · Sender ledger  { sender: total_sent }</div>
+      <div class="line multi">
+<pre><span class="com"># nested: for every unique sender, sum their amounts</span>
+<span class="var">ledger</span> = {
+    s: <span class="bi">sum</span>(t[<span class="str">"amount"</span>] <span class="kw">for</span> t <span class="kw">in</span> <span class="var">transactions</span> <span class="kw">if</span> t[<span class="str">"sender"</span>] == s)
+    <span class="kw">for</span> s <span class="kw">in</span> {t[<span class="str">"sender"</span>] <span class="kw">for</span> t <span class="kw">in</span> <span class="var">transactions</span>}
+}</pre>
+      </div>
+    </div>
+
+    <div class="footer"><em>From Bits to Blockchain</em><span class="sep">·</span>Python Essentials II</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLIDE 14 — WRAP & NEXT
+       ═══════════════════════════════════════════════════════ -->
+  <section class="slide s14">
+    <div class="crumb"><span class="c-mod">M1</span><span class="sep">·</span><span>DAY 03</span><span class="sep">·</span><span>Wrap · Next</span></div>
+    <div class="pageno"><span class="cur">14</span><span class="sep">/</span><span>14</span></div>
+
+    <div class="title">
+      <span class="num">14</span><span class="slash">//</span><span class="name">Wrap-up &amp; what's next</span>
+    </div>
+
+    <div class="checklist">
+      <div class="eyebrow">Today you should be able to…</div>
+      <div class="check-item">
+        <svg class="check-ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 100 24 12 12 0 000-24zm-1.5 17.6L5.6 12.7l1.7-1.7 3.2 3.2 6.2-6.2 1.7 1.7z"/></svg>
+        pick list vs tuple vs dict vs set fluently
+      </div>
+      <div class="check-item">
+        <svg class="check-ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 100 24 12 12 0 000-24zm-1.5 17.6L5.6 12.7l1.7-1.7 3.2 3.2 6.2-6.2 1.7 1.7z"/></svg>
+        filter &amp; transform a list in one expression
+      </div>
+      <div class="check-item">
+        <svg class="check-ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 100 24 12 12 0 000-24zm-1.5 17.6L5.6 12.7l1.7-1.7 3.2 3.2 6.2-6.2 1.7 1.7z"/></svg>
+        build a dict from two parallel lists
+      </div>
+      <div class="check-item">
+        <svg class="check-ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 100 24 12 12 0 000-24zm-1.5 17.6L5.6 12.7l1.7-1.7 3.2 3.2 6.2-6.2 1.7 1.7z"/></svg>
+        import from stdlib, third-party, and your own files
+      </div>
+      <div class="check-item">
+        <svg class="check-ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 100 24 12 12 0 000-24zm-1.5 17.6L5.6 12.7l1.7-1.7 3.2 3.2 6.2-6.2 1.7 1.7z"/></svg>
+        read &amp; write text and JSON safely with <code style="font-family:var(--mono); color:var(--accent);">with</code>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div>
+        <div class="eyebrow">Tomorrow · Day 04</div>
+        <div class="panel accent">
+          <div class="h">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            DSA — Lists &amp; Strings
+          </div>
+          <div class="desc">
+            Big-O intuition · two-pointer technique · string manipulation patterns. We'll tackle interview-style problems on the same kinds of data structures we used today.
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="eyebrow">Before you close the laptop</div>
+        <div class="panel accent">
+          <div class="h">
+            <svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 00-3.8 23.4c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.7.1-.7 1.2 0 1.9 1.3 1.9 1.3 1.1 1.9 2.8 1.4 3.5 1 .1-.8.4-1.4.8-1.7-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.3-3.2-.1-.3-.6-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 016 0c2.3-1.6 3.3-1.2 3.3-1.2.7 1.7.3 2.9.1 3.2.8.9 1.3 2 1.3 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.3v3.4c0 .3.2.7.8.6A12 12 0 0012 0z"/></svg>
+            Daily commit habit
+          </div>
+          <div class="commit-block">
+            <span class="pp">$</span> git add . <span style="color: var(--faint);">&amp;&amp;</span> git commit -m <span class="str">"day3: collections"</span><br>
+            <span class="pp">$</span> git push origin main
+            <div class="note"># 38 commits to go — the portfolio compounds</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer"><em>From Bits to Blockchain</em><span class="sep">·</span>Python Essentials II</div>
+  </section>
+
+</div>
+
+<div id="ui">
+  <div class="pill"><span class="ac" id="cur-slide">01</span> / <span id="total-slides">14</span></div>
+  <div class="pill">← → · F · ?</div>
+</div>
+
+<div id="help">
+  <div class="box">
+    <h3>Keyboard shortcuts</h3>
+    <div><kbd>→</kbd> <kbd>Space</kbd> next slide</div>
+    <div><kbd>←</kbd> previous slide</div>
+    <div><kbd>Home</kbd> first slide</div>
+    <div><kbd>End</kbd> last slide</div>
+    <div><kbd>1</kbd>–<kbd>9</kbd> jump to slide</div>
+    <div><kbd>F</kbd> fullscreen</div>
+    <div><kbd>?</kbd> toggle this help</div>
+    <div><kbd>Esc</kbd> close help</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const deck = document.getElementById('deck');
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const curEl = document.getElementById('cur-slide');
+  const totalEl = document.getElementById('total-slides');
+  const help = document.getElementById('help');
+
+  totalEl.textContent = String(total).padStart(2, '0');
+
+  let idx = 0;
+
+  function show(i) {
+    if (i < 0 || i >= total) return;
+    slides[idx].classList.remove('active');
+    slides[i].classList.add('active');
+    idx = i;
+    curEl.textContent = String(i + 1).padStart(2, '0');
+    // sync URL hash for bookmarkable slides
+    history.replaceState(null, '', '#' + (i + 1));
+  }
+
+  function next() { if (idx < total - 1) show(idx + 1); }
+  function prev() { if (idx > 0) show(idx - 1); }
+
+  // Fit the 1280×720 design into the viewport
+  function fit() {
+    const sx = window.innerWidth / 1280;
+    const sy = window.innerHeight / 720;
+    const s = Math.min(sx, sy);
+    deck.style.transform = `scale(${s})`;
+    deck.style.left = ((window.innerWidth - 1280 * s) / 2) + 'px';
+    deck.style.top  = ((window.innerHeight - 720 * s) / 2) + 'px';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (help.classList.contains('show')) {
+      if (e.key === 'Escape' || e.key === '?') { help.classList.remove('show'); e.preventDefault(); }
+      return;
+    }
+    switch (e.key) {
+      case 'ArrowRight':
+      case ' ':
+      case 'PageDown':
+        next(); e.preventDefault(); break;
+      case 'ArrowLeft':
+      case 'PageUp':
+        prev(); e.preventDefault(); break;
+      case 'Home': show(0); e.preventDefault(); break;
+      case 'End':  show(total - 1); e.preventDefault(); break;
+      case 'f': case 'F':
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen();
+        break;
+      case '?':
+        help.classList.toggle('show'); e.preventDefault(); break;
+      default:
+        if (/^[1-9]$/.test(e.key)) { show(parseInt(e.key, 10) - 1); }
+    }
+  });
+
+  // Click to advance, shift+click to go back
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#help')) return;
+    if (e.shiftKey) prev(); else next();
+  });
+
+  // Open at #N if specified
+  const m = location.hash.match(/^#(\d+)$/);
+  if (m) {
+    const n = parseInt(m[1], 10) - 1;
+    if (n >= 0 && n < total) show(n);
+  }
+})();
+</script>
+
+</body>
+</html>
