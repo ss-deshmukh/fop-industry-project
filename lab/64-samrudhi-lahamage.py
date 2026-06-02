@@ -26,3 +26,9 @@ def number(n):
 number(a)
 number(b)
 number(c)
+#problem4
+a=[1,2,3]
+def element(list):
+    for x in list:
+        print(x)
+element(a)
