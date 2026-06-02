@@ -31,4 +31,14 @@ c=19
 print("a",div_3(a))
 print("b",div_3(b))
 print("C",div_3(C))
-        
+
+#problem 4
+a=[1,2,3]
+def print_ele(a):
+    i=0
+    for x in a: 
+        i=i+1
+        print(i)
+
+print_ele(a)
+
