@@ -14,3 +14,15 @@ def number(n):
 number(a)
 number(b)
 number(c)
+#problem3
+a=4
+b=9
+c=19
+def number(n):
+    if n%3==0:
+        print("devisible by 3")
+    else:
+        print("not divisible by 3")
+number(a)
+number(b)
+number(c)
