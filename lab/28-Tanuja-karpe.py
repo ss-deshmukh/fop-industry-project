@@ -33,10 +33,18 @@ else:
 even_or_odd(a)
 even_or_odd(b)
 even_or_odd(c)
+
 #problem4
 l=[1,2,3]
 def display(l=list):
   for x in l:
 print(x)
 display(l)
+
+#problem5
+l=[1,2,3,4,5,6]
+l.pop(4)
+l.pop(2)
+l.pop(0)
+print(l)
 
