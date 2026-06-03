@@ -31,7 +31,7 @@ def number (a):
 #problem5
 problem 1
 l=[1,2,3,4,5,6]
-1.pop(4)
-1.pop(2)
-1.pop(0)
-print (1)
+l.pop(4)
+l.pop(2)
+l.pop(0)
+print (l)
