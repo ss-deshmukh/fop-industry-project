@@ -28,3 +28,10 @@ def number (a):
      for x in q:
           print (x)
      number (a)
+#problem5
+problem 1
+l=[1,2,3,4,5,6]
+1.pop(4)
+1.pop(2)
+1.pop(0)
+print (1)
