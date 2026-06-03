@@ -22,3 +22,9 @@ for x in m:
           print("divis")
      else:
           print("divisible")
+#problem4
+q[1,2,3]
+def number (a):
+     for x in q:
+          print (x)
+     number (a)
