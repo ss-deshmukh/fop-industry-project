@@ -61,3 +61,10 @@ print(1)
 print(1)
 1.pop(0)
 print(1)
+
+# problem 7
+d={"Ram":30,"Vijay":40,"Radha":60}
+print(d["Vijay"])
+d.update({"Tom":2,"Don":10})
+print(d)
+
