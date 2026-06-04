@@ -38,3 +38,8 @@ print(l)
  #problem 6
 d={"Ram": 30,"Vijay": 40,"Radha": 60}
 print(d["Vijay"])
+ #problem 7
+d={"Ram": 30,"Vijay": 40,"Radha": 60}
+d.update({"tom" : 10})
+d.update({"don": 2})
+print(d)
