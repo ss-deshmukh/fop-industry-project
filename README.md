@@ -22,7 +22,7 @@ implemented entirely in Python.
 |------|-----------------|
 | `lecture_presentations/M{module}D{day}.html` | The slide deck for each lecture day |
 | `lab/module_{n}_{name}/D{NN}_{slug}/` | Each day's lab problem (`problem.md` + `starter.py`) |
-| `students/<github-username>/` | **Each student's personal workspace** — solutions live here |
+| `students/<firstname-lastname>/` | **Each student's personal folder** — one file per lab, e.g. `D04_greeter.py` |
 | `quizzes/` | The 3 biweekly mini-quizzes + final mini-test |
 | `syllabus/COURSE_DESIGN.md` | The full course plan (design doc) |
 | `syllabus/COURSE_PLAN.html` | Student-facing interactive course overview |
@@ -32,20 +32,28 @@ implemented entirely in Python.
 
 The PR workflow is **fork + personal folder**:
 
-1. **One-time:** Click **Fork** at the top of this repo on github.com.
+1. **One-time setup:**
+   - Click **Fork** at the top of this repo on github.com.
+   - Inside your fork, create the folder `students/<your-firstname-lastname>/`
+     (e.g. `students/shreya-deshmukh/`). This is your personal workspace for
+     the whole course — you only do this once.
+
 2. **For each lab problem:**
    - Click **"Sync fork"** on your fork's homepage to get today's new starter.
    - Open your fork in [GitHub Codespaces](https://github.com/features/codespaces)
      (`Code → Codespaces → Create codespace`) — this is a free in-browser VS
      Code with Python already installed.
-   - Create a new file at `students/<your-github-username>/D{NN}_{slug}.py`.
+   - Create a new file inside **your own folder**:
+     `students/<your-firstname-lastname>/D{NN}_{slug}.py`
+     (e.g. `students/shreya-deshmukh/D04_greeter.py`).
    - Copy the day's `starter.py` into it and solve the problem.
    - Commit + push from VS Code's Source Control panel.
    - Open a Pull Request against the upstream `main` branch.
+
 3. Faculty reviews and merges your PR.
 
-Over 8 weeks each student accumulates ~30 files in their `students/<username>/`
-folder — a visible portfolio on their GitHub profile.
+Over 8 weeks each student accumulates ~30 files in their personal folder —
+a visible portfolio on their GitHub profile.
 
 ## How faculty work
 
