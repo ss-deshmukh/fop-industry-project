@@ -34,3 +34,6 @@ l.pop(4)
 l.pop(2)
 l.pop(0)
 print(l)
+#problem 6
+d=["ram":30,"vijay":40,"radha":60]
+print(d["vijay"])
