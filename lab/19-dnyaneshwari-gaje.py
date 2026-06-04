@@ -48,5 +48,13 @@ L.pop(4)
 L.pop(2)
 L.pop(0)
 print(L)
+#problem
+d={"Ram"=30,"Vijay"=40,"Radha"=60}
+print(d["vijay"])
+#problem
+d={"Ram"=30,"Vijay"=40,"Radha"=60}
+d.update({"Tom"=2,"Don"=10})
+print(d)
+
 
  
