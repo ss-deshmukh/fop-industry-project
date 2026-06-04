@@ -1,4 +1,13 @@
- 
+#problem2 
+a=2
+b=26
+c=37
+l=[a,b,c]
+for x in l:
+     if x % 2 == 0:
+       print(f"Even")
+     else:
+       print(f"odd") 
 #problem3
 a=4
 b=9
