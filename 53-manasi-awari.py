@@ -29,9 +29,12 @@ def number(q):
   for x in q:
     print(x)
 number(q)
-#problem5
+ #problem5
 l=[1,2,3,4,5,6]
 l.pop(4)
 l.pop(2)
 l.pop(0)
 print(l)
+ #problem 6
+d={"Ram": 30,"Vijay": 40,"Radha": 60}
+print(d["Vijay"])
