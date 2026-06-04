@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>From Bits to Blockchain — Course Syllabus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0A0F;
+    --surface: #0F0F1A;
+    --border: #1E1E2E;
+    --border2: #1A1A2E;
+    --text: #E2E8F0;
+    --muted: #64748B;
+    --dim: #475569;
+    --sub: #94A3B8;
+    --light: #CBD5E1;
+    --accent: #00D4FF;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    min-height: 100vh;
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #2a2a3a; border-radius: 3px; }
+
+  /* ── HEADER ── */
+  .header {
+    border-bottom: 1px solid var(--border2);
+    padding: 28px 32px 20px;
+  }
+  .header-inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header-eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .header-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #F1F5F9;
+    line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .stat-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    text-align: center;
+    min-width: 70px;
+  }
+  .stat-label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    transition: color 0.3s;
+  }
+
+  /* ── MODULE TABS ── */
+  .tabs-bar {
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--border2);
+    overflow-x: auto;
+  }
+  .tabs {
+    display: flex;
+    gap: 8px;
+    min-width: max-content;
+  }
+  .mod-tab {
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    transition: all 0.2s ease;
+  }
+  .mod-tab:hover { opacity: 0.85; transform: translateY(-1px); }
+  .mod-tab.active { /* set via JS */ }
+  .mod-tab span { opacity: 0.5; }
+
+  /* ── MODULE BODY ── */
+  .module-body { padding: 24px 32px; }
+
+  .module-heading {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .module-bar {
+    width: 4px;
+    height: 40px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .module-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .module-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #F1F5F9;
+  }
+
+  /* ── DAY CARDS ── */
+  .day-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+    cursor: pointer;
+  }
+  .day-card:hover { border-color: #333; }
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    user-select: none;
+  }
+  .day-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 3px 8px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .day-title-text {
+    font-size: 13px;
+    font-weight: 500;
+    flex: 1;
+    color: var(--light);
+  }
+  .chevron {
+    font-size: 10px;
+    transition: transform 0.2s ease;
+    color: var(--dim);
+    flex-shrink: 0;
+  }
+  .chevron.open { transform: rotate(180deg); }
+
+  .day-body {
+    padding: 0 16px 16px;
+    border-top: 1px solid var(--border);
+    animation: slideDown 0.15s ease;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .topic-list { list-style: none; margin: 12px 0; }
+  .topic-list li {
+    font-size: 12px;
+    color: var(--sub);
+    padding: 4px 0 4px 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .topic-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--dim);
+  }
+
+  .exercise-box {
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-top: 10px;
+    font-size: 11.5px;
+    line-height: 1.6;
+    color: var(--light);
+  }
+  .exercise-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 16px 32px 32px;
+    font-size: 11px;
+    color: #334155;
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    .header, .tabs-bar, .module-body { padding-left: 16px; padding-right: 16px; }
+    .header-title { font-size: 20px; }
+    .stats { gap: 8px; }
+    .stat-box { padding: 10px 12px; min-width: 60px; }
+    .stat-value { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div style="position:fixed; top:0; left:0; right:0; z-index:9999; background:#FFD43B; color:#0A0A0F; font-family:system-ui,sans-serif; font-size:14px; font-weight:600; text-align:center; padding:10px 16px; border-bottom:2px solid #0A0A0F;">
+  ⚠ DEPRECATED — This blockchain-heavy syllabus was scrapped on 2026-05-29. The active course plan is now <a href="COURSE_DESIGN.md" style="color:#0A0A0F; text-decoration:underline;">syllabus/COURSE_DESIGN.md</a>. This page is kept only as historical reference.
+</div>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="header-eyebrow">Course Syllabus · 2 Months · 3 Lectures / Day</div>
+      <div class="header-title">From Bits to Blockchain</div>
+      <div class="header-sub">CS Foundations → Cryptography → Blockchain → Polkadot → Smoldot</div>
+    </div>
+    <div class="stats">
+      <div class="stat-box"><div class="stat-label">Total Days</div><div class="stat-value" id="stat-days">40</div></div>
+      <div class="stat-box"><div class="stat-label">Hours</div><div class="stat-value" id="stat-hours">40h</div></div>
+      <div class="stat-box"><div class="stat-label">Modules</div><div class="stat-value" id="stat-modules">5</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs-bar">
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<div class="module-body" id="module-body"></div>
+
+<div class="footer">
+  Click any lecture day to expand topics &amp; exercises &nbsp;·&nbsp; 1 hour per session &nbsp;·&nbsp; Same content taught 3× daily to different classes
+</div>
+
+<script>
+const syllabus = [
+  {
+    module: 1, title: "CS Foundations", color: "#00D4FF", weeks: "Week 1–2",
+    days: [
+      { day: 1, title: "Number Systems I – Decimal & Binary", topics: ["How humans count: the decimal (base-10) system","Why computers use binary (base-2)","Converting decimal ↔ binary by hand","Bits and bytes: the fundamental units of data"], exercise: "Convert a set of decimal numbers to binary and back. Count to 20 in binary on your fingers." },
+      { day: 2, title: "Number Systems II – Hexadecimal", topics: ["Why hex (base-16) exists as a shorthand for binary","Hex digits 0–9 and A–F","Converting binary ↔ hex and decimal ↔ hex","Where hex appears: colors, memory addresses, hashes"], exercise: "Decode an HTML color code (#1A2B3C) step by step. Write your name in hex ASCII." },
+      { day: 3, title: "Binary Arithmetic & Logic Gates", topics: ["Binary addition and overflow","Two's complement for negative numbers","AND, OR, NOT, XOR gates","How arithmetic flows through transistors"], exercise: "Add two 8-bit binary numbers. Trace a XOR operation that's key to cryptography." },
+      { day: 4, title: "How Data is Represented", topics: ["ASCII and Unicode (UTF-8) for text","How images are pixels and pixels are numbers","Audio as sampled waveforms","File formats: why .jpg differs from .png"], exercise: "Decode a short ASCII binary message. Inspect a raw image file in hex." },
+      { day: 5, title: "How Computers Work", topics: ["CPU: fetch-decode-execute cycle","RAM vs storage: volatile vs persistent","Operating system as the middleman","Processes and threads"], exercise: "Draw a diagram of a program running in memory. Observe running processes on your own machine." },
+      { day: 6, title: "Networking Basics I", topics: ["What is a network? LAN, WAN, the Internet","IP addresses (IPv4 and IPv6)","Packets: how data travels in chunks","Routers, switches, and the physical layer"], exercise: "Run `ping` and `traceroute` to a website. Map the hops your packet takes." },
+      { day: 7, title: "Networking Basics II – Protocols", topics: ["TCP vs UDP: reliability vs speed","DNS: turning names into addresses","HTTP and HTTPS: the web's language","Ports and sockets"], exercise: "Inspect HTTP headers in your browser DevTools. See what your browser sends to a server." },
+      { day: 8, title: "Client–Server & APIs", topics: ["Client-server model: request and response","REST APIs: resources and verbs (GET, POST)","JSON: the universal data format","Authentication tokens vs sessions"], exercise: "Call a public REST API (e.g. weather or CoinGecko) using curl or a browser. Read the JSON response." },
+      { day: 9, title: "Command Line & Developer Tooling", topics: ["Terminal navigation: ls, cd, mkdir, cat","Git basics: init, add, commit, push","Package managers: npm / yarn","Reading documentation and error messages"], exercise: "Initialise a Git repo, make two commits, and push to GitHub." },
+      { day: 10, title: "Data Structures You'll See Everywhere", topics: ["Arrays and linked lists","Key-value stores (hash maps/dictionaries)","Trees and why blockchains love them","Stacks and queues"], exercise: "Implement a simple key-value store in JavaScript. Understand why lookup is O(1)." },
+    ]
+  },
+  {
+    module: 2, title: "Cryptography Essentials", color: "#7C3AED", weeks: "Week 3",
+    days: [
+      { day: 11, title: "Hash Functions", topics: ["What a hash function does: any input → fixed output","Properties: deterministic, one-way, avalanche effect","SHA-256 and Keccak-256 in blockchain","Hash collisions and why they're catastrophic"], exercise: "Hash the same string in Node.js. Change one character and observe the completely different result." },
+      { day: 12, title: "Symmetric & Asymmetric Encryption", topics: ["Symmetric: same key to lock and unlock (AES)","The key distribution problem","Asymmetric: public/private key pairs (RSA, ECDSA)","HTTPS handshake under the hood"], exercise: "Encrypt and decrypt a message using a symmetric key in Node.js crypto module." },
+      { day: 13, title: "Digital Signatures", topics: ["Signing with your private key, verifying with public key","Why signatures prove authorship without revealing the key","ECDSA: the signature scheme blockchains use","Wallet addresses as hashed public keys"], exercise: "Generate a key pair, sign a message, and verify the signature in Node.js." },
+      { day: 14, title: "Merkle Trees", topics: ["Binary trees where each node is a hash of its children","The Merkle root: a fingerprint of all data","Merkle proofs: verifying one item without all data","Used in Bitcoin blocks and blockchain state"], exercise: "Build a Merkle tree from 4 transactions in JavaScript. Generate and verify a proof." },
+      { day: 15, title: "Cryptography Review & Putting It Together", topics: ["End-to-end: how a signed blockchain transaction works","Entropy and seed phrases (BIP-39)","HD wallets and key derivation paths","Common attack vectors: replay, MITM, phishing"], exercise: "Trace the full lifecycle of a transaction: key generation → signing → broadcasting." },
+    ]
+  },
+  {
+    module: 3, title: "Blockchain Fundamentals", color: "#F59E0B", weeks: "Week 4–5",
+    days: [
+      { day: 16, title: "What Is a Blockchain?", topics: ["Distributed ledger vs centralised database","The double-spend problem and why it matters","Immutability: why changing one block breaks all","Bitcoin's origin: the 2008 whitepaper"], exercise: "Manually link two blocks with hashes in JavaScript. Tamper with one and show the chain breaks." },
+      { day: 17, title: "Anatomy of a Block", topics: ["Block header: previous hash, timestamp, nonce, merkle root","Block body: list of transactions","Genesis block: the very first block","Block explorers: reading the chain live"], exercise: "Inspect a real Bitcoin block on a block explorer. Identify every field." },
+      { day: 18, title: "Consensus – Proof of Work", topics: ["The consensus problem: how strangers agree","Mining: finding a nonce that satisfies difficulty","Longest chain rule","Energy cost and 51% attacks"], exercise: "Write a simple PoW miner in JavaScript that finds a hash starting with '000'." },
+      { day: 19, title: "Consensus – Proof of Stake", topics: ["Validators stake tokens as collateral","Slashing: punishment for misbehaving","Finality: when is a block truly irreversible?","Ethereum's move to PoS (The Merge)"], exercise: "Simulate a simple validator selection lottery weighted by stake in JavaScript." },
+      { day: 20, title: "Wallets, Keys & Transactions", topics: ["Hot vs cold wallets","UTXO model (Bitcoin) vs account model (Ethereum)","Transaction fields: from, to, value, nonce, gas","Transaction lifecycle: mempool → confirmed"], exercise: "Create a testnet wallet. Send a test transaction and watch it propagate." },
+      { day: 21, title: "Smart Contracts", topics: ["Code that lives on the blockchain and runs autonomously","EVM: Ethereum Virtual Machine basics","Solidity: a first look at contract syntax","ABI: how you call a contract from outside"], exercise: "Read a deployed ERC-20 token contract on Etherscan. Decode a function call." },
+      { day: 22, title: "Tokens & Standards", topics: ["Fungible tokens: ERC-20 (all units identical)","NFTs: ERC-721 (each unit unique)","Token economics and supply mechanics","Stablecoins: pegged assets"], exercise: "Call the balanceOf function of a live ERC-20 token using ethers.js." },
+      { day: 23, title: "DeFi & Web3 Landscape", topics: ["DEXes vs centralised exchanges","Liquidity pools and AMMs","Bridges: moving assets across chains","Web3 mental model: you own your data and keys"], exercise: "Use a testnet DEX. Observe the smart contract being called in the transaction log." },
+      { day: 24, title: "Ethereum Deep Dive", topics: ["Gas, gwei, and the fee market (EIP-1559)","Layer 2 rollups: Optimism, Arbitrum","The Ethereum roadmap: sharding & Danksharding","RPC endpoints and connecting to a node"], exercise: "Connect to an Ethereum RPC with ethers.js. Query latest block number and a wallet balance." },
+      { day: 25, title: "Blockchain Review & Quiz", topics: ["Recap: hashing, consensus, transactions, smart contracts","Compare Bitcoin, Ethereum, and emerging chains","Security: common exploits (reentrancy, front-running)","Open Q&A and misconceptions busted"], exercise: "Group quiz: students explain concepts to each other. Peer-grade answers." },
+    ]
+  },
+  {
+    module: 4, title: "Polkadot Ecosystem", color: "#E6007A", weeks: "Week 6",
+    days: [
+      { day: 26, title: "Why Polkadot Exists", topics: ["The blockchain scalability trilemma","Interoperability: why chains need to talk to each other","Gavin Wood's vision and the Polkadot whitepaper","DOT token: governance, staking, bonding"], exercise: "Read the Polkadot lite paper section on heterogeneous sharding. Summarise in 5 bullets." },
+      { day: 27, title: "Relay Chain & Parachains", topics: ["Relay chain: the security and consensus hub","Parachains: sovereign chains that lease relay chain slots","Parachain auctions and crowdloans","Kusama: Polkadot's canary network"], exercise: "Explore a live parachain on Subscan. Compare its block time and validator set to the relay chain." },
+      { day: 28, title: "Substrate Framework", topics: ["Substrate: the toolkit to build a blockchain in Rust","Pallets: modular runtime components","FRAME: the pallet composition system","How parachains are built on Substrate"], exercise: "Clone the Substrate node template. Identify the pallets in the runtime and what each does." },
+      { day: 29, title: "Cross-Chain Messaging (XCM)", topics: ["XCM: a language for cross-chain instructions","Channels: HRMP and later XCMP","Sending assets and calling remote pallets","Real-world XCM: parachain DeFi composability"], exercise: "Read and decode a real XCM message from a Subscan transaction. Label each instruction." },
+      { day: 30, title: "Polkadot Review & Ecosystem Map", topics: ["Full architecture recap: relay → parachain → dApp","Notable parachains: Moonbeam, Astar, Acala","Polkadot 2.0: Agile Coretime and JAM","Resources: Polkadot wiki, Substrate docs, W3F grants"], exercise: "Draw the full Polkadot architecture from memory. Add one real parachain example to each layer." },
+    ]
+  },
+  {
+    module: 5, title: "Smoldot – Light Clients Hands-On", color: "#10B981", weeks: "Week 7–8",
+    days: [
+      { day: 31, title: "What Is a Light Client?", topics: ["Full node vs light client vs trusted RPC","The trust problem with RPC endpoints","How a light client verifies without syncing everything","Why light clients matter for decentralisation"], exercise: "Map the trust assumptions of MetaMask (RPC) vs a light client. Where can each be lied to?" },
+      { day: 32, title: "Introducing Smoldot", topics: ["Smoldot: a Polkadot/Substrate light client in Rust (and WASM)","Architecture: chain spec, network layer, JSON-RPC server","smoldot vs substrate-connect: what's the difference","Chain specs: the bootstrap config for a chain"], exercise: "Read the smoldot README and architecture docs. Sketch the component diagram." },
+      { day: 33, title: "Setting Up the Environment", topics: ["Installing Node.js and npm","Adding smoldot to a project: npm install smoldot","Project structure and TypeScript setup","Understanding the async/await pattern in JavaScript"], exercise: "Scaffold a new Node.js project, install smoldot, and confirm the import resolves without errors." },
+      { day: 34, title: "Connecting to a Chain", topics: ["Loading a chain spec (Westend testnet)","addChain(): bootstrapping the light client","Waiting for the client to sync: watching log output","Graceful shutdown and resource cleanup"], exercise: 'Write code to connect smoldot to Westend. Log each sync status update until "ready".' },
+      { day: 35, title: "Reading Chain State", topics: ["JSON-RPC in Polkadot: the new unstable API","chainHead_unstable_follow: subscribing to new blocks","state_getStorage: reading a storage key","Decoding SCALE-encoded responses"], exercise: "Query the total issuance of DOT on Westend. Decode the SCALE bytes to a readable number." },
+      { day: 36, title: "Subscribing to Events", topics: ["Event-driven architecture with smoldot","Subscribing to new finalized blocks","Parsing block headers: number, parent hash, state root","Filtering for specific events in block data"], exercise: "Subscribe to finalized blocks and print the block number and hash for each one as it arrives." },
+      { day: 37, title: "Submitting Transactions", topics: ["Constructing an extrinsic (transaction) manually","Signing with a test keypair using @polkadot/keyring","author_submitExtrinsic and watching for inclusion","Error handling: invalid nonce, insufficient balance"], exercise: "Sign and submit a balance transfer on Westend testnet. Confirm inclusion using smoldot." },
+      { day: 38, title: "Using substrate-connect in the Browser", topics: ["substrate-connect: smoldot in a browser extension","WellKnownChain enum: predefined chain specs","Integrating with Polkadot.js API via provider","Browser DevTools: watching the light client sync"], exercise: "Build a minimal HTML page that uses substrate-connect to display the current block number live." },
+      { day: 39, title: "Mini Project – Chain Dashboard", topics: ["Connecting to a parachain via smoldot relay + para","Displaying: block number, finalized hash, peer count","Polling account balances with state_getStorage","Styling and presenting the dashboard"], exercise: "Build a Node.js or browser dashboard showing live chain stats for Westend. Add one extra metric of your choice." },
+      { day: 40, title: "Capstone Review & Next Steps", topics: ["Recap the full learning arc: bits → blockchain → light client","Common smoldot gotchas and debugging tips","Where to go next: Substrate runtime dev, ink! contracts, XCM","Open-source contribution opportunities in the Polkadot ecosystem"], exercise: "Each student presents their dashboard. Peer feedback on code quality and UX." },
+    ]
+  },
+];
+
+let activeModule = 0;
+let expandedDay = null;
+
+function hex(color, alpha) {
+  return color + Math.round(alpha * 255).toString(16).padStart(2, '0');
+}
+
+function renderTabs() {
+  const container = document.getElementById('tabs');
+  container.innerHTML = '';
+  syllabus.forEach((m, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'mod-tab' + (i === activeModule ? ' active' : '');
+    btn.innerHTML = `<span>M${m.module} · </span>${m.title}`;
+    if (i === activeModule) {
+      btn.style.background = hex(m.color, 0.13);
+      btn.style.borderColor = m.color;
+      btn.style.color = m.color;
+    }
+    btn.addEventListener('click', () => {
+      activeModule = i;
+      expandedDay = null;
+      renderTabs();
+      renderModule();
+      updateStats();
+    });
+    container.appendChild(btn);
+  });
+}
+
+function updateStats() {
+  const c = syllabus[activeModule].color;
+  document.getElementById('stat-days').style.color = c;
+  document.getElementById('stat-hours').style.color = c;
+  document.getElementById('stat-modules').style.color = c;
+}
+
+function renderModule() {
+  const mod = syllabus[activeModule];
+  const body = document.getElementById('module-body');
+
+  let html = `
+    <div class="module-heading">
+      <div class="module-bar" style="background: linear-gradient(to bottom, ${mod.color}, ${hex(mod.color, 0.27)})"></div>
+      <div>
+        <div class="module-eyebrow" style="color:${mod.color}">Module ${mod.module} · ${mod.weeks} · ${mod.days.length} lecture days</div>
+        <div class="module-title">${mod.title}</div>
+      </div>
+    </div>
+    <div id="days-list">
+  `;
+
+  mod.days.forEach(day => {
+    const isOpen = expandedDay === day.day;
+    const topicsHtml = day.topics.map(t => `<li>${t}</li>`).join('');
+    const bodyHtml = isOpen ? `
+      <div class="day-body">
+        <ul class="topic-list">${topicsHtml}</ul>
+        <div class="exercise-box" style="background:${hex(mod.color, 0.05)};border:1px solid ${hex(mod.color, 0.2)}">
+          <div class="exercise-label" style="color:${mod.color}">⚡ Exercise</div>
+          ${day.exercise}
+        </div>
+      </div>
+    ` : '';
+
+    html += `
+      <div class="day-card" style="border-color:${isOpen ? hex(mod.color, 0.33) : '#1E1E2E'}" data-day="${day.day}">
+        <div class="day-header">
+          <div class="day-badge" style="background:${hex(mod.color, 0.13)};color:${mod.color}">Day ${day.day}</div>
+          <div class="day-title-text">${day.title}</div>
+          <div class="chevron ${isOpen ? 'open' : ''}">▼</div>
+        </div>
+        ${bodyHtml}
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+  body.innerHTML = html;
+
+  // Attach click listeners
+  body.querySelectorAll('.day-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const d = parseInt(card.dataset.day);
+      expandedDay = expandedDay === d ? null : d;
+      renderModule();
+    });
+  });
+}
+
+// Init
+renderTabs();
+renderModule();
+updateStats();
+</script>
+</body>
+</html>

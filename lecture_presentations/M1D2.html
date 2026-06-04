@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Module 1 · Day 2 — Python Essentials I</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ─────────────────────────  THEME  ───────────────────────── */
+  :root{
+    --bg:#0A0A0F; --surface:#111122; --card:#15152A;
+    --border:#262640; --border-br:#353556;
+    --text:#E2E8F0; --text-br:#F1F5F9; --muted:#94A3B8; --dim:#64748B; --faint:#475569;
+    --cyan:#00D4FF; --cyan-dim:#0891A8; --yellow:#FFD43B; --green:#34D399; --red:#F87171; --purple:#A78BFA;
+    --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+    --sans:'IBM Plex Sans',system-ui,sans-serif;
+    --disp:'Space Grotesk','IBM Plex Sans',sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:#050507; color:var(--text); font-family:var(--sans);
+    overflow:hidden; display:grid; place-items:center;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ─────────────────────────  STAGE  ───────────────────────── */
+  .scaler{ transform-origin:center center; }
+  .stage{
+    width:1280px; height:720px; position:relative;
+    background:var(--bg); overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.6); border-radius:10px;
+  }
+  .slide{
+    position:absolute; inset:0; padding:56px 64px 48px;
+    display:flex; flex-direction:column;
+    opacity:0; visibility:hidden; transition:opacity .35s ease;
+  }
+  .slide.active{ opacity:1; visibility:visible; }
+
+  /* staggered entrance */
+  .slide.active .r{ animation:rise .5s cubic-bezier(.2,.7,.2,1) both;
+    animation-delay:calc(var(--d,0) * 55ms); }
+  @keyframes rise{ from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none} }
+
+  /* ─────────────────────────  PRIMITIVES  ───────────────────────── */
+  .eyebrow{ font-family:var(--mono); font-size:13px; font-weight:600;
+    letter-spacing:.22em; text-transform:uppercase; color:var(--cyan); }
+  .eyebrow .pre{ color:var(--cyan); margin-right:6px; }
+  .h-title{ font-family:var(--disp); font-weight:700; color:var(--text-br);
+    line-height:1.08; }
+  .lede{ font-size:16px; color:var(--muted); font-style:italic; line-height:1.5; max-width:62ch; }
+
+  .card{ background:var(--card); border:1px solid var(--border); border-radius:10px; }
+
+  /* code block */
+  .code{ background:var(--bg); border:1px solid var(--border); border-radius:9px;
+    overflow:hidden; display:flex; flex-direction:column; min-height:0; }
+  .cbar{ display:flex; align-items:center; gap:7px; padding:9px 13px;
+    border-bottom:1px solid var(--border); flex:0 0 auto; }
+  .cd{ width:9px; height:9px; border-radius:50%; background:#5C5C7A; }
+  .cf{ margin-left:8px; font-family:var(--mono); font-size:11.5px; color:var(--dim); }
+  .cpre{ margin:0; padding:14px 16px; overflow:auto; flex:1 1 auto; }
+  .cpre code{ font-family:var(--mono); font-size:15px; line-height:1.62;
+    color:var(--text); white-space:pre; display:block; }
+  /* syntax */
+  .kw{ color:var(--cyan); } .const{ color:var(--purple); }
+  .bif{ color:var(--yellow); } .num{ color:#FFA657; }
+  .str{ color:var(--green); } .com{ color:var(--dim); font-style:italic; }
+
+  /* icons */
+  .ic{ width:1em; height:1em; stroke:currentColor; fill:none;
+    stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+    display:inline-block; vertical-align:-0.14em; }
+
+  /* ─────────────────────────  HUD  ───────────────────────── */
+  .progress{ position:fixed; top:0; left:0; height:3px; background:var(--cyan);
+    width:0; z-index:50; transition:width .35s ease; box-shadow:0 0 10px var(--cyan); }
+  .hud{ position:fixed; bottom:18px; right:20px; z-index:50;
+    display:flex; align-items:center; gap:14px;
+    font-family:var(--mono); font-size:13px; color:var(--dim);
+    background:rgba(17,17,34,.72); backdrop-filter:blur(8px);
+    border:1px solid var(--border); border-radius:999px; padding:7px 14px;
+    opacity:.5; transition:opacity .25s; }
+  .hud:hover{ opacity:1; }
+  .hud button{ all:unset; cursor:pointer; color:var(--muted); line-height:0;
+    padding:3px; border-radius:6px; transition:color .15s,background .15s; }
+  .hud button:hover{ color:var(--cyan); background:rgba(0,212,255,.1); }
+  .hud .count b{ color:var(--cyan); }
+  .hud .sep{ width:1px; height:16px; background:var(--border); }
+  .hint{ position:fixed; bottom:18px; left:20px; z-index:50;
+    font-family:var(--mono); font-size:11px; color:var(--faint);
+    opacity:.7; transition:opacity .6s; }
+  .hint.gone{ opacity:0; }
+  .hint b{ color:var(--dim); }
+
+  /* ─────────────────────────  PRINT (PDF backup)  ───────────────────────── */
+  @media print{
+    @page{ size:1280px 720px; margin:0; }
+    body{ display:block; overflow:visible; background:#fff; }
+    .scaler{ transform:none !important; }
+    .stage{ box-shadow:none; border-radius:0; }
+    .slide{ position:relative; opacity:1 !important; visibility:visible !important;
+      page-break-after:always; break-after:page; transition:none; }
+    .slide .r{ animation:none !important; }
+    .hud,.hint,.progress,.zone{ display:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="scaler" id="scaler">
+<div class="stage" id="stage">
+
+  <!-- ═══════ SLIDE 1 · TITLE ═══════ -->
+  <section class="slide" style="justify-content:center; padding:64px 72px;">
+    <div class="bg-grid" style="position:absolute;inset:0;
+      background-image:repeating-linear-gradient(transparent 0,transparent 89px,var(--border) 89px,var(--border) 90px);
+      opacity:.6;"></div>
+    <div style="position:relative;">
+      <div class="r eyebrow" style="--d:0; margin-bottom:26px;">&gt;&gt; Module 01 / Day 02 / Lecture</div>
+      <h1 class="r h-title" style="--d:1; font-size:86px; letter-spacing:-1px;">Python Essentials I</h1>
+      <div class="r" style="--d:2; font-family:var(--disp); font-weight:500; font-style:italic;
+        font-size:50px; color:var(--cyan); margin-top:6px;">Syntax &amp; Functions</div>
+
+      <div class="r" style="--d:3; display:flex; align-items:center; gap:14px; margin-top:40px;">
+        <svg class="ic" style="font-size:26px;color:var(--yellow)"><use href="#i-term"/></svg>
+        <span style="font-size:18px;color:var(--muted);font-style:italic;">
+          The language of data, AI, and — today — every modern blockchain analytics stack.</span>
+      </div>
+
+      <div class="r" style="--d:4; display:flex; gap:42px; margin-top:46px; font-size:15px;
+        font-family:var(--sans);">
+        <div><span class="meta-k">Duration</span><div class="meta-v">1&nbsp;hr lecture&nbsp;&nbsp;+&nbsp;&nbsp;1&nbsp;hr lab</div></div>
+        <div><span class="meta-k">Format</span><div class="meta-v">6 functions in one&nbsp;.py file</div></div>
+        <div><span class="meta-k">Maps to</span><div class="meta-v" style="color:var(--cyan)">CO2 · CO3</div></div>
+      </div>
+    </div>
+    <div style="position:absolute; top:58px; right:72px; font-family:var(--mono);
+      font-size:14px; color:var(--dim); letter-spacing:.18em;">DAY 02 / 40</div>
+  </section>
+
+  <!-- ═══════ SLIDE 2 · WHERE WE ARE ═══════ -->
+  <section class="slide">
+    <div class="r eyebrow" style="--d:0;">&gt;&gt; Where we are</div>
+    <h2 class="r h-title" style="--d:1; font-size:44px; margin-top:8px;">Day 2 of a 40-day journey</h2>
+
+    <!-- timeline -->
+    <div class="r" style="--d:2; position:relative; margin-top:54px;">
+      <div style="position:absolute; left:5%; top:-34px; display:flex; align-items:center;
+        gap:7px; transform:translateX(-2px);">
+        <span style="font-family:var(--mono);font-size:12px;font-weight:600;color:var(--cyan);
+          letter-spacing:.08em; white-space:nowrap;">▼ YOU ARE HERE · DAY 02</span>
+      </div>
+      <div style="display:flex; gap:5px; height:62px;">
+        <div class="tl on" style="flex:10">M1<small>Python &amp; Data</small></div>
+        <div class="tl" style="flex:5">M2<small>Cryptography</small></div>
+        <div class="tl" style="flex:10">M3<small>Blockchain</small></div>
+        <div class="tl" style="flex:5">M4<small>Polkadot</small></div>
+        <div class="tl" style="flex:10">M5<small>Polkadot · Py</small></div>
+      </div>
+    </div>
+
+    <!-- 3 context cards -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:42px;">
+      <div class="r card" style="--d:3; padding:20px 22px;">
+        <div class="ctag">Yesterday · Day 01</div>
+        <div class="ctitle">Course Kickoff &amp; Python Setup</div>
+        <p class="cbody">Installed Python 3.11+, VS Code, Git. Built a virtual env. Pushed a “hello blockchain” script to GitHub.</p>
+      </div>
+      <div class="r card today" style="--d:4; padding:20px 22px;">
+        <div class="ctag" style="color:var(--cyan)">Today · Day 02</div>
+        <div class="ctitle" style="color:var(--text-br)">Python Essentials I</div>
+        <p class="cbody">Variables, strings, control flow, functions. By the end of today: 6 working Python functions on your machine.</p>
+      </div>
+      <div class="r card" style="--d:5; padding:20px 22px;">
+        <div class="ctag">Tomorrow · Day 03</div>
+        <div class="ctitle">Python Essentials II — Collections</div>
+        <p class="cbody">Lists, tuples, dicts, sets, comprehensions. We start handling sample transaction data.</p>
+      </div>
+    </div>
+    <div class="footer"></div>
+  </section>
+
+  <!-- ═══════ SLIDE 3 · ROADMAP ═══════ -->
+  <section class="slide">
+    <div class="r eyebrow" style="--d:0;">&gt;&gt; Today's roadmap</div>
+    <h2 class="r h-title" style="--d:1; font-size:42px; margin-top:8px;">Four building blocks, then a lab</h2>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:34px;">
+      <div class="r card topic" style="--d:2;">
+        <div class="tnum">01</div>
+        <svg class="ic ticon"><use href="#i-tag"/></svg>
+        <div class="ttitle">Variables &amp; Types</div>
+        <p class="tbody">int, float, str, bool. Python's dynamic typing — what it lets you do, and what it hides.</p>
+      </div>
+      <div class="r card topic" style="--d:3;">
+        <div class="tnum">02</div>
+        <svg class="ic ticon"><use href="#i-code"/></svg>
+        <div class="ttitle">Strings &amp; f-strings</div>
+        <p class="tbody">String methods you'll use daily. f-strings: the cleanest way to format text in modern Python.</p>
+      </div>
+      <div class="r card topic" style="--d:4;">
+        <div class="tnum">03</div>
+        <svg class="ic ticon"><use href="#i-branch"/></svg>
+        <div class="ttitle">Control Flow</div>
+        <p class="tbody">if / elif / else. for and while loops. Indentation is syntax — not decoration.</p>
+      </div>
+      <div class="r card topic" style="--d:5;">
+        <div class="tnum">04</div>
+        <svg class="ic ticon"><use href="#i-box"/></svg>
+        <div class="ttitle">Functions</div>
+        <p class="tbody">Parameters, return values, default arguments. The unit of reuse in every Python codebase.</p>
+      </div>
+    </div>
+
+    <div class="r" style="--d:6; margin-top:auto; display:flex; align-items:center; gap:14px;
+      border:1.5px solid var(--cyan); border-radius:10px; padding:14px 20px;
+      background:rgba(0,212,255,.04);">
+      <svg class="ic" style="font-size:22px;color:var(--purple)"><use href="#i-flask"/></svg>
+      <span style="font-family:var(--mono);font-size:13px;font-weight:600;color:var(--cyan);
+        letter-spacing:.1em;">PRACTICAL LAB · 1 HR</span>
+      <span style="font-size:16px;color:var(--text);">Six warm-up problems → six functions in one&nbsp;.py file.</span>
+    </div>
+    <div class="footer"></div>
+  </section>
+
+  <!-- ═══════ SLIDE 4 · VARIABLES & TYPES ═══════ -->
+  <section class="slide">
+    <div class="r eyebrow" style="--d:0;">&gt;&gt; 01 / 04 · Variables &amp; Types</div>
+    <h2 class="r h-title" style="--d:1; font-size:40px; margin-top:8px;">Python is dynamically typed</h2>
+    <p class="r lede" style="--d:2; margin-top:10px;">You don't declare types — Python infers them at runtime. Powerful, but you must still know what type a value is.</p>
+
+    <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:22px; margin-top:24px; flex:1; min-height:0;">
+      <div class="r code" style="--d:3;" data-code="vars" data-file="01_variables.py"></div>
+      <div class="r card" style="--d:4; padding:22px 24px;">
+        <div class="ctag" style="color:var(--cyan); margin-bottom:14px;">The four you'll use daily</div>
+        <div class="typerow"><span class="ty">int</span><span class="tex">42</span>
+          <span class="tuse">block numbers, nonces, counts</span></div>
+        <div class="typerow"><span class="ty">float</span><span class="tex">3.14</span>
+          <span class="tuse">prices, percentages, ratios</span></div>
+        <div class="typerow"><span class="ty">str</span><span class="tex">"0xabc…"</span>
+          <span class="tuse">addresses, hashes, names</span></div>
+        <div class="typerow"><span class="ty">bool</span><span class="tex">True</span>
+          <span class="tuse">flags: is_signed, has_funds</span></div>
+      </div>
+    </div>
+    <div class="footer"></div>
+  </section>
+
+  <!-- ═══════ SLIDE 5 · STRINGS & f-STRINGS ═══════ -->
+  <section class="slide">
+    <div class="r eyebrow" style="--d:0;">&gt;&gt; 02 / 04 · Strings &amp; f-strings</div>
+    <h2 class="r h-title" style="--d:1; font-size:38px; margin-top:8px;">f-strings: the only way you should format strings</h2>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:24px; flex:1; min-height:0;">
+      <div class="r" style="--d:2; display:flex; flex-direction:column; min-height:0;">
+        <div class="evo-h"><svg class="ic" style="color:var(--red)"><use href="#i-x"/></svg>
+          <span style="color:var(--red)">THE OLD WAY (%)</span></div>
+        <div class="evo-t">Python 2 style. Avoid.</div>
+        <div class="code" style="flex:1;" data-code="leg" data-file="legacy.py"></div>
+      </div>
+      <div class="r" style="--d:3; display:flex; flex-direction:column; min-height:0;">
+        <div class="evo-h"><svg class="ic" style="color:var(--yellow)"><use href="#i-alert"/></svg>
+          <span style="color:var(--yellow)">THE OK WAY (.format)</span></div>
+        <div class="evo-t">Works, but verbose.</div>
+        <div class="code" style="flex:1;" data-code="fmt" data-file="format.py"></div>
+      </div>
+      <div class="r" style="--d:4; display:flex; flex-direction:column; min-height:0;">
+        <div class="evo-h"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg>
+          <span style="color:var(--green)">THE PYTHONIC WAY (f'…')</span></div>
+        <div class="evo-t">Use this. Always.</div>
+        <div class="code" style="flex:1;" data-code="mod" data-file="modern.py"></div>
+      </div>
+    </div>
+
+    <div class="r" style="--d:5; margin-top:16px; display:flex; align-items:center; gap:13px;
+      background:var(--card); border:1px solid var(--border); border-radius:9px; padding:12px 18px;">
+      <svg class="ic" style="font-size:20px;color:var(--yellow)"><use href="#i-bulb"/></svg>
+      <span style="font-family:var(--mono);font-size:12px;font-weight:600;color:var(--cyan);
+        letter-spacing:.08em;">METHODS YOU'LL USE</span>
+      <span style="font-family:var(--mono);font-size:13.5px;color:var(--text);">
+        .lower() &nbsp;.upper() &nbsp;.strip() &nbsp;.split() &nbsp;.replace() &nbsp;.startswith() &nbsp;.endswith() &nbsp;len(s)</span>
+    </div>
+    <div class="footer"></div>
+  </section>
+
+  <!-- ═══════ SLIDE 6 · CONDITIONALS ═══════ -->
+  <section class="slide">
+    <div class="r eyebrow" style="--d:0;">&gt;&gt; 03 / 04 · Control Flow · Conditionals</div>
+    <h2 class="r h-title" style="--d:1; font-size:40px; margin-top:8px;">Decisions in code: if / elif / else</h2>
+    <p class="r lede" style="--d:2; margin-top:10px;">Indentation <em>is</em> the syntax. No braces. Four spaces per level — Python is strict about it.</p>
+
+    <div style="display:grid; grid-template-columns:1.4fr 1fr; gap:22px; margin-top:24px; flex:1; min-height:0;">
+      <div class="r code" style="--d:3;" data-code="cond" data-file="02_conditionals.py"></div>
+      <div class="r card" style="--d:4; padding:22px 24px;">
+        <div class="ctag" style="color:var(--cyan); margin-bottom:16px;">Operators you'll chain</div>
+        <div class="opgrid">
+          <div class="op"><b>==</b><span>equal</span></div>
+          <div class="op"><b>!=</b><span>not equal</span></div>
+          <div class="op"><b>&lt; &nbsp;&gt;</b><span>less / greater</span></div>
+          <div class="op"><b>&lt;= &gt;=</b><span>or equal</span></div>
+          <div class="op"><b>and</b><span>both true</span></div>
+          <div class="op"><b>or</b><span>either true</span></div>
+          <div class="op"><b>not</b><span>flip the bool</span></div>
+          <div class="op"><b>in</b><span>membership test</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"></div>
+  </section>
+
+  <!-- ═══════ SLIDE 7 · LOOPS ═══════ -->
+  <section class="slide">
+    <div class="r eyebrow" style="--d:0;">&gt;&gt; 03 / 04 · Control Flow · Loops</div>
+    <h2 class="r h-title" style="--d:1; font-size:40px; margin-top:8px;">for vs while — same idea, different shapes</h2>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:24px; flex:1; min-height:0;">
+      <div class="r" style="--d:2; display:flex; flex-direction:column; min-height:0;">
+        <div style="font-family:var(--mono);font-size:20px;font-weight:600;color:var(--cyan);">for loop</div>
+        <div style="font-size:14px;font-style:italic;color:var(--muted);margin:2px 0 12px;">known iterations</div>
+        <div class="code" style="flex:1;" data-code="for" data-file="for_demo.py"></div>
+      </div>
+      <div class="r" style="--d:3; display:flex; flex-direction:column; min-height:0;">
+        <div style="font-family:var(--mono);font-size:20px;font-weight:600;color:var(--purple);">while loop</div>
+        <div style="font-size:14px;font-style:italic;color:var(--muted);margin:2px 0 12px;">condition-driven</div>
+        <div class="code" style="flex:1;" data-code="while" data-file="while_demo.py"></div>
+      </div>
+    </div>
+
+    <div class="r" style="--d:4; margin-top:16px; font-size:14px;">
+      <span style="font-family:var(--mono);font-weight:600;color:var(--cyan);letter-spacing:.08em;">RULE OF THUMB</span>
+      <span style="color:var(--muted);font-style:italic;"> · In Python you'll write 9 for-loops for every 1 while-loop.</span>
+    </div>
+    <div class="footer"></div>
+  </section>
+
+  <!-- ═══════ SLIDE 8 · FUNCTIONS ═══════ -->
+  <section class="slide">
+    <div class="r eyebrow" style="--d:0;">&gt;&gt; 04 / 04 · Functions</div>
+    <h2 class="r h-title" style="--d:1; font-size:40px; margin-top:8px;">Functions — the unit of reuse</h2>
+    <p class="r lede" style="--d:2; margin-top:10px;">If you write the same logic twice, it should be a function. Period.</p>
+
+    <div style="display:grid; grid-template-columns:1.45fr 1fr; gap:26px; margin-top:24px; flex:1; min-height:0;">
+      <div class="r code" style="--d:3;" data-code="fn" data-file="03_functions.py"></div>
+      <div class="r" style="--d:4; display:flex; flex-direction:column; justify-content:space-between; gap:14px;">
+        <div class="anat"><span class="pill">def</span>
+          <p>Keyword that <b>defines</b> a function.</p></div>
+        <div class="anat"><span class="pill">( )</span>
+          <p><b>Parameters</b> — the values it accepts. <code>rate=0.01</code> is a default argument.</p></div>
+        <div class="anat"><span class="pill">docstring</span>
+          <p>The <code>"""…"""</code> line — explains what the function does. Tools &amp; IDEs read it.</p></div>
+        <div class="anat"><span class="pill">return</span>
+          <p>Sends a value back to the caller. No <code>return</code> → returns <code>None</code>.</p></div>
+      </div>
+    </div>
+    <div class="footer"></div>
+  </section>
+
+  <!-- ═══════ SLIDE 9 · PITFALLS ═══════ -->
+  <section class="slide">
+    <div class="r eyebrow" style="--d:0;">&gt;&gt; Watch out for</div>
+    <h2 class="r h-title" style="--d:1; font-size:42px; margin-top:8px;">Five mistakes you'll make today</h2>
+    <p class="r lede" style="--d:2; margin-top:10px;">Knowing them in advance saves 30 minutes of stuck-on-this-error.</p>
+
+    <div style="margin-top:26px; display:flex; flex-direction:column; gap:10px;">
+      <div class="r pit" style="--d:3;">
+        <div class="pw"><svg class="ic" style="color:var(--red)"><use href="#i-x"/></svg><code>if x = 5:</code></div>
+        <svg class="ic arrow"><use href="#i-arrow"/></svg>
+        <div class="pr"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg><code>if x == 5:</code></div>
+        <div class="pn">= assigns. == compares. Don't mix them.</div>
+      </div>
+      <div class="r pit" style="--d:4;">
+        <div class="pw"><svg class="ic" style="color:var(--red)"><use href="#i-x"/></svg><code>if amount &gt; "100":</code></div>
+        <svg class="ic arrow"><use href="#i-arrow"/></svg>
+        <div class="pr"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg><code>if amount &gt; 100:</code></div>
+        <div class="pn">Comparing a number to a string crashes — quotes matter.</div>
+      </div>
+      <div class="r pit" style="--d:5;">
+        <div class="pw"><svg class="ic" style="color:var(--red)"><use href="#i-x"/></svg><code>for i in range(10): print(i)</code></div>
+        <svg class="ic arrow"><use href="#i-arrow"/></svg>
+        <div class="pr"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg><code>for i in range(10):<br>&nbsp;&nbsp;&nbsp;&nbsp;print(i)</code></div>
+        <div class="pn">Indentation is required. 4 spaces — be consistent.</div>
+      </div>
+      <div class="r pit" style="--d:6;">
+        <div class="pw"><svg class="ic" style="color:var(--red)"><use href="#i-x"/></svg><code>print(n + " has " + age)</code></div>
+        <svg class="ic arrow"><use href="#i-arrow"/></svg>
+        <div class="pr"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg><code>print(f"{n} has {age}")</code></div>
+        <div class="pn">Concatenating str + int throws TypeError.</div>
+      </div>
+      <div class="r pit" style="--d:7;">
+        <div class="pw"><svg class="ic" style="color:var(--red)"><use href="#i-x"/></svg><code>def fee(amt):<br>&nbsp;&nbsp;amt * 0.01</code></div>
+        <svg class="ic arrow"><use href="#i-arrow"/></svg>
+        <div class="pr"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg><code>def fee(amt):<br>&nbsp;&nbsp;return amt * 0.01</code></div>
+        <div class="pn">Forgot return? Function silently returns None.</div>
+      </div>
+    </div>
+    <div class="footer"></div>
+  </section>
+
+  <!-- ═══════ SLIDE 10 · LAB INTRO ═══════ -->
+  <section class="slide">
+    <div class="r eyebrow" style="--d:0;">&gt;&gt; Practical Lab · 1 hr</div>
+    <h2 class="r h-title" style="--d:1; font-size:42px; margin-top:8px;">Six warm-ups, one .py file</h2>
+    <p class="r lede" style="--d:2; margin-top:10px;">One function per problem. Plain Python — no libraries. Push the file to your GitHub when done.</p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:24px;">
+      <div class="r card prob" style="--d:3;"><div class="prhead"><span class="prnum">01</span>Reverse a string</div>
+        <code class="prsig">reverse_string(s) → str</code>
+        <code class="prex">reverse_string("blockchain")<br>→ "niahckcolb"</code></div>
+      <div class="r card prob" style="--d:3;"><div class="prhead"><span class="prnum">02</span>Find max in a list</div>
+        <code class="prsig">find_max(nums) → int</code>
+        <code class="prex">find_max([3, 7, 2, 9, 4])<br>→ 9</code></div>
+      <div class="r card prob" style="--d:4;"><div class="prhead"><span class="prnum">03</span>Check even or odd</div>
+        <code class="prsig">is_even(n) → bool</code>
+        <code class="prex">is_even(7)&nbsp;&nbsp;&nbsp;→ False<br>is_even(10)&nbsp;&nbsp;→ True</code></div>
+      <div class="r card prob" style="--d:4;"><div class="prhead"><span class="prnum">04</span>FizzBuzz</div>
+        <code class="prsig">fizzbuzz(n) → list</code>
+        <code class="prex">fizzbuzz(5)<br>→ [1,2,"Fizz",4,"Buzz"]</code></div>
+      <div class="r card prob" style="--d:5;"><div class="prhead"><span class="prnum">05</span>Count vowels</div>
+        <code class="prsig">count_vowels(s) → int</code>
+        <code class="prex">count_vowels("polkadot")<br>→ 3</code></div>
+      <div class="r card prob" style="--d:5;"><div class="prhead"><span class="prnum">06</span>Sum of digits</div>
+        <code class="prsig">sum_digits(n) → int</code>
+        <code class="prex">sum_digits(12345)<br>→ 15</code></div>
+    </div>
+
+    <div class="r" style="--d:6; margin-top:auto; border:1px solid var(--cyan); border-radius:9px;
+      padding:11px 18px; background:var(--surface);">
+      <span style="font-family:var(--mono);font-weight:600;color:var(--cyan);letter-spacing:.1em;">DELIVERABLE</span>
+      <span style="color:var(--text);"> · warmups.py with 6 functions · one print() demo per function · push to GitHub</span>
+    </div>
+    <div class="footer"></div>
+  </section>
+
+  <!-- ═══════ SLIDE 11 · FIZZBUZZ WALKTHROUGH ═══════ -->
+  <section class="slide">
+    <div class="r eyebrow" style="--d:0;">&gt;&gt; Walkthrough · Problem 04</div>
+    <h2 class="r h-title" style="--d:1; font-size:38px; margin-top:8px;">FizzBuzz — the everyone-has-to-know problem</h2>
+    <p class="r lede" style="--d:2; margin-top:10px;">Asked in 1 out of every 3 programming interviews. We solve it once, properly.</p>
+
+    <div style="display:grid; grid-template-columns:1fr 1.25fr; gap:22px; margin-top:24px; flex:1; min-height:0;">
+      <div class="r card" style="--d:3; padding:22px 24px; display:flex; flex-direction:column;">
+        <div class="ctag" style="color:var(--cyan); margin-bottom:12px;">The spec</div>
+        <p style="font-size:16px; color:var(--text); margin-bottom:14px;">Given a number <code style="font-family:var(--mono);color:var(--cyan)">n</code>, return a list from 1 to n where:</p>
+        <div class="specrow"><svg class="ic" style="color:var(--cyan)"><use href="#i-arrow"/></svg>
+          <span>multiples of 3 → <b class="strc">"Fizz"</b></span></div>
+        <div class="specrow"><svg class="ic" style="color:var(--cyan)"><use href="#i-arrow"/></svg>
+          <span>multiples of 5 → <b class="strc">"Buzz"</b></span></div>
+        <div class="specrow"><svg class="ic" style="color:var(--cyan)"><use href="#i-arrow"/></svg>
+          <span>multiples of 15 → <b class="strc">"FizzBuzz"</b></span></div>
+        <div class="specrow"><svg class="ic" style="color:var(--cyan)"><use href="#i-arrow"/></svg>
+          <span>everything else → <b style="color:var(--cyan)">the number itself</b></span></div>
+        <div style="margin-top:auto; display:flex; gap:10px; align-items:flex-start;
+          color:var(--yellow); font-size:13.5px; font-style:italic; line-height:1.5;">
+          <svg class="ic" style="flex:0 0 auto;margin-top:3px"><use href="#i-bulb"/></svg>
+          <span>Check the largest case <b>first</b>. Otherwise 15 hits “Fizz” before you ever reach “FizzBuzz”.</span>
+        </div>
+      </div>
+      <div class="r code" style="--d:4;" data-code="fizz" data-file="problem_04_fizzbuzz.py"></div>
+    </div>
+    <div class="footer"></div>
+  </section>
+
+  <!-- ═══════ SLIDE 12 · RECAP ═══════ -->
+  <section class="slide">
+    <div class="r eyebrow" style="--d:0;">&gt;&gt; Recap</div>
+    <h2 class="r h-title" style="--d:1; font-size:46px; margin-top:8px;">What you can now do</h2>
+
+    <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:32px; margin-top:28px; flex:1; min-height:0;">
+      <div style="display:flex; flex-direction:column; gap:18px;">
+        <div class="r take" style="--d:2;"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg>
+          <div><b>Declare and use the four primitive types</b>
+            <span>int · float · str · bool — and inspect any value with type().</span></div></div>
+        <div class="r take" style="--d:3;"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg>
+          <div><b>Format strings the modern way</b>
+            <span>f-strings with embedded expressions and number formatting.</span></div></div>
+        <div class="r take" style="--d:4;"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg>
+          <div><b>Control program flow</b>
+            <span>Branching with if/elif/else. Looping with for and while.</span></div></div>
+        <div class="r take" style="--d:5;"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg>
+          <div><b>Write reusable functions</b>
+            <span>def, parameters, defaults, return — the unit of reuse anywhere.</span></div></div>
+      </div>
+      <div class="r card today" style="--d:6; padding:22px 24px;">
+        <div class="ctag" style="color:var(--cyan)">Up next · Day 03</div>
+        <div style="font-family:var(--disp);font-weight:600;font-size:24px;color:var(--text-br);margin-top:8px;">Python Essentials II</div>
+        <div style="font-style:italic;color:var(--cyan);font-size:17px;margin:2px 0 14px;">Collections</div>
+        <ul class="nextlist">
+          <li>lists, tuples, dicts, sets</li>
+          <li>list &amp; dict comprehensions</li>
+          <li>reading &amp; writing files</li>
+          <li>first taste of transaction data</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="r" style="--d:7; margin-top:18px; display:flex; align-items:center; gap:13px;
+      border:1px solid var(--cyan); border-radius:9px; padding:12px 18px; background:var(--surface);">
+      <svg class="ic" style="font-size:20px;color:var(--cyan)"><use href="#i-send"/></svg>
+      <span style="font-family:var(--mono);font-weight:600;color:var(--cyan);letter-spacing:.08em;">BEFORE TOMORROW</span>
+      <span style="color:var(--text);"> · finish warmups.py · push to GitHub · read about Python lists on python.org</span>
+    </div>
+    <div class="footer"></div>
+  </section>
+
+  <!-- ═══════ SLIDE 13 · QUESTIONS ═══════ -->
+  <section class="slide" style="justify-content:center;">
+    <div class="bg-grid" style="position:absolute;inset:0;
+      background-image:repeating-linear-gradient(transparent 0,transparent 89px,var(--border) 89px,var(--border) 90px);
+      opacity:.55;"></div>
+    <div style="position:relative;">
+      <h2 class="r" style="--d:0; font-family:var(--disp); font-weight:700; font-size:88px; color:var(--text-br); display:flex; align-items:baseline; gap:8px;">
+        <span style="font-family:var(--mono);color:var(--cyan);font-weight:600;">&gt;&gt;&gt;</span>
+        questions?</h2>
+      <p class="r" style="--d:1; font-size:18px; color:var(--muted); font-style:italic; margin-top:14px;">
+        Lab starts in 5 minutes. Open VS Code, create <code style="font-family:var(--mono);color:var(--cyan)">warmups.py</code>, and let's solve six problems.</p>
+
+      <div class="r" style="--d:2; margin-top:34px; display:flex; flex-direction:column; gap:11px;">
+        <div class="check"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg>Python 3.11+ working?</div>
+        <div class="check"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg>VS Code with Python extension installed?</div>
+        <div class="check"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg>Virtual environment activated?</div>
+        <div class="check"><svg class="ic" style="color:var(--green)"><use href="#i-check"/></svg>GitHub repo from Day 1 cloned locally?</div>
+      </div>
+    </div>
+    <div style="position:absolute; bottom:40px; right:64px; font-family:var(--mono);
+      font-size:12px; color:var(--faint); letter-spacing:.18em;">FROM BITS TO BLOCKCHAIN · DAY 02 / 40</div>
+  </section>
+
+</div><!-- /stage -->
+</div><!-- /scaler -->
+
+<!-- HUD -->
+<div class="hud">
+  <button id="prev" title="Previous (←)"><svg class="ic" style="font-size:18px"><use href="#i-chevL"/></svg></button>
+  <span class="count"><b id="cur">01</b> / <span id="total">13</span></span>
+  <button id="next" title="Next (→)"><svg class="ic" style="font-size:18px"><use href="#i-chevR"/></svg></button>
+  <span class="sep"></span>
+  <button id="fs" title="Fullscreen (F)"><svg class="ic" style="font-size:17px"><use href="#i-fs"/></svg></button>
+</div>
+<div class="hint"><b>←/→</b> navigate &nbsp; <b>F</b> fullscreen &nbsp; <b>Ctrl/⌘+P</b> save as PDF</div>
+
+<!-- SVG icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+  <symbol id="i-term" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
+  <symbol id="i-branch" viewBox="0 0 24 24"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5.2 9.4A1.5 1.5 0 0 0 6.1 21h11.8a1.5 1.5 0 0 0 1.3-2.6L14 9V3"/><line x1="7.5" y1="14" x2="16.5" y2="14"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></symbol>
+  <symbol id="i-chevL" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></symbol>
+  <symbol id="i-chevR" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+  <symbol id="i-fs" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></symbol>
+</svg>
+
+<style>
+  /* component styles (kept here for readability) */
+  .meta-k{ font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--faint); display:block; }
+  .meta-v{ color:var(--text); margin-top:4px; }
+
+  .tl{ background:var(--card); border:1px solid var(--border); border-radius:7px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    font-family:var(--mono); font-weight:600; font-size:16px; color:var(--muted); }
+  .tl small{ font-family:var(--sans); font-weight:400; font-size:11px; color:var(--dim); margin-top:3px; }
+  .tl.on{ background:var(--cyan); border-color:var(--cyan); color:var(--bg); }
+  .tl.on small{ color:rgba(10,10,15,.8); }
+
+  .ctag{ font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--dim); }
+  .ctitle{ font-family:var(--disp); font-weight:600; font-size:18px; color:var(--muted); margin-top:10px; line-height:1.25; }
+  .cbody{ font-size:13.5px; color:var(--muted); line-height:1.5; margin-top:9px; }
+  .card.today{ border:1.5px solid var(--cyan); position:relative; }
+  .card.today::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px;
+    background:var(--cyan); border-radius:10px 0 0 10px; }
+
+  .topic{ padding:20px 22px; position:relative; }
+  .tnum{ font-family:var(--mono); font-weight:600; font-size:26px; color:var(--cyan); }
+  .ticon{ position:absolute; top:22px; right:22px; font-size:22px; color:var(--cyan); }
+  .ttitle{ font-family:var(--disp); font-weight:600; font-size:21px; color:var(--text-br); margin-top:8px; }
+  .tbody{ font-size:14px; color:var(--muted); line-height:1.5; margin-top:8px; }
+
+  .typerow{ padding:9px 0; border-top:1px solid var(--border); }
+  .typerow:first-of-type{ border-top:none; }
+  .ty{ font-family:var(--mono); font-weight:600; font-size:17px; color:var(--cyan); display:inline-block; width:62px; }
+  .tex{ font-family:var(--mono); font-size:15px; color:var(--text); }
+  .tuse{ display:block; font-size:12.5px; font-style:italic; color:var(--dim); margin-top:3px; }
+
+  .evo-h{ display:flex; align-items:center; gap:7px; font-family:var(--mono);
+    font-size:12.5px; font-weight:600; letter-spacing:.04em; }
+  .evo-h .ic{ font-size:15px; flex:0 0 auto; }
+  .evo-t{ font-size:12.5px; font-style:italic; color:var(--muted); margin:3px 0 9px; }
+
+  .opgrid{ display:grid; grid-template-columns:1fr 1fr; gap:14px 18px; }
+  .op b{ font-family:var(--mono); font-size:17px; color:var(--cyan); display:block; }
+  .op span{ font-size:12.5px; color:var(--muted); }
+
+  .anat{ display:flex; gap:14px; align-items:flex-start; }
+  .pill{ flex:0 0 auto; font-family:var(--mono); font-size:13px; font-weight:600; color:var(--cyan);
+    border:1px solid var(--cyan); border-radius:6px; padding:5px 0; width:92px; text-align:center;
+    background:var(--card); }
+  .anat p{ font-size:14.5px; color:var(--text); line-height:1.45; }
+  .anat code{ font-family:var(--mono); color:var(--cyan); font-size:13px; }
+
+  .pit{ display:grid; grid-template-columns:1fr 28px 1fr 1.05fr; align-items:center; gap:6px;
+    background:var(--card); border:1px solid var(--border); border-radius:8px; padding:11px 16px; }
+  .pit:nth-child(even){ background:var(--surface); }
+  .pw,.pr{ display:flex; align-items:center; gap:9px; }
+  .pw .ic,.pr .ic{ font-size:17px; flex:0 0 auto; }
+  .pw code{ font-family:var(--mono); font-size:13.5px; color:var(--red); }
+  .pr code{ font-family:var(--mono); font-size:13.5px; color:var(--green); }
+  .pit .arrow{ color:var(--dim); font-size:16px; justify-self:center; }
+  .pn{ font-size:12.5px; font-style:italic; color:var(--muted); }
+
+  .prob{ padding:16px 18px; }
+  .prhead{ display:flex; align-items:center; gap:11px; font-family:var(--disp);
+    font-weight:600; font-size:16px; color:var(--text-br); }
+  .prnum{ font-family:var(--mono); font-weight:600; font-size:18px; color:var(--cyan); }
+  .prsig{ display:block; font-family:var(--mono); font-size:13px; color:var(--cyan); margin-top:11px; }
+  .prex{ display:block; font-family:var(--mono); font-size:12.5px; color:var(--muted); margin-top:7px; line-height:1.5; }
+
+  .specrow{ display:flex; align-items:center; gap:10px; padding:7px 0; font-size:15px; color:var(--text); }
+  .specrow .ic{ font-size:15px; flex:0 0 auto; }
+  .strc{ color:var(--green); font-family:var(--mono); font-weight:500; }
+
+  .take{ display:flex; gap:14px; align-items:flex-start; }
+  .take .ic{ font-size:24px; flex:0 0 auto; margin-top:2px; }
+  .take b{ font-family:var(--disp); font-weight:600; font-size:18px; color:var(--text-br); display:block; }
+  .take span{ font-size:13.5px; color:var(--muted); display:block; margin-top:3px; line-height:1.45; }
+
+  .nextlist{ list-style:none; }
+  .nextlist li{ font-size:14px; color:var(--text); padding:5px 0 5px 16px; position:relative; }
+  .nextlist li::before{ content:"·"; position:absolute; left:2px; color:var(--cyan); font-weight:700; }
+
+  .check{ display:flex; align-items:center; gap:13px; font-size:17px; color:var(--text); }
+  .check .ic{ font-size:20px; flex:0 0 auto; }
+
+  .footer{ position:absolute; left:0; right:0; bottom:20px; text-align:center;
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em; }
+  .footer::before{ content:"FROM BITS TO BLOCKCHAIN · MODULE 1 · DAY 2"; color:var(--faint); }
+</style>
+
+<script>
+/* ───────── syntax highlighter (curated python snippets) ───────── */
+const KW   = "def|return|if|elif|else|for|while|in|and|or|not|import|from|class|as|with|pass|break|continue|lambda|is";
+const BIF  = "print|range|len|type|enumerate|append|format|int|float|str|bool|list|dict|set|sum|max|min|sorted";
+const reKW = new RegExp("\\b(" + KW  + ")\\b", "g");
+const reBI = new RegExp("\\b(" + BIF + ")\\b", "g");
+const reCO = /\b(True|False|None)\b/g;
+const reNUM= /\b(\d[\d_]*\.?\d*)\b/g;
+
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function highlight(src){
+  let s = esc(src);
+  const store = [];
+  // every token is stashed and replaced with a Private-Use-Area placeholder, so
+  // the working string never contains span markup for a later regex to corrupt
+  const put = html => String.fromCharCode(0xE000 + store.push(html) - 1);
+  s = s.replace(/#[^\n]*/g, m => put('<span class="com">'+m+'</span>'));
+  s = s.replace(/("""[\s\S]*?"""|'''[\s\S]*?''')/g,
+        m => put('<span class="str">'+m+'</span>'));
+  s = s.replace(/([fFrRbB]{0,2}"(?:[^"\\]|\\.)*"|[fFrRbB]{0,2}'(?:[^'\\]|\\.)*')/g,
+        m => put('<span class="str">'+m+'</span>'));
+  s = s.replace(reCO,  m => put('<span class="const">'+m+'</span>'));
+  s = s.replace(reKW,  m => put('<span class="kw">'+m+'</span>'));
+  s = s.replace(reBI,  m => put('<span class="bif">'+m+'</span>'));
+  s = s.replace(reNUM, m => put('<span class="num">'+m+'</span>'));
+  s = s.replace(/[\uE000-\uF8FF]/g, ch => store[ch.charCodeAt(0) - 0xE000]); // restore
+  return s;
+}
+
+/* ───────── code snippets ───────── */
+const CODES = {
+  vars:
+`# No type declarations needed
+balance     = 1500.75      # float
+sender      = "alice"      # str
+block_num   = 18_452_103   # int (underscores ok!)
+is_valid    = True         # bool
+nothing     = None         # NoneType
+
+# Check a type at runtime
+print(type(balance))       # <class 'float'>
+print(type(is_valid))      # <class 'bool'>
+
+# Re-assigning changes the type
+balance = "frozen"         # now a str!`,
+
+  leg:
+`name = "Alice"
+bal  = 1500.75
+
+msg = "Hi %s, balance %.2f" \\
+      % (name, bal)
+
+print(msg)
+# Hi Alice, balance 1500.75`,
+
+  fmt:
+`name = "Alice"
+bal  = 1500.75
+
+msg = "Hi {}, balance {:.2f}" \\
+      .format(name, bal)
+
+print(msg)
+# Hi Alice, balance 1500.75`,
+
+  mod:
+`name = "Alice"
+bal  = 1500.75
+
+msg = f"Hi {name}, balance {bal:.2f}"
+
+print(msg)
+# Hi Alice, balance 1500.75
+
+# Inline expressions, too:
+print(f"2x is {bal * 2:.2f}")`,
+
+  cond:
+`amount = 750
+
+if amount < 0:
+    status = "invalid"
+elif amount < 100:
+    status = "small"
+elif amount < 10_000:
+    status = "normal"
+else:
+    status = "whale-sized"
+
+print(f"{amount} = {status}")
+# 750 = normal`,
+
+  for:
+`# for: when you KNOW how many times
+prices = [120, 95, 140, 60, 200]
+total = 0
+
+for p in prices:
+    total += p
+
+print(total)   # 615
+
+# range() generates a sequence
+for i in range(5):
+    print(i)   # 0, 1, 2, 3, 4
+
+# enumerate for index + value
+for i, p in enumerate(prices):
+    print(i, p)`,
+
+  while:
+`# while: when you DON'T know how
+#   many times — until condition flips
+balance = 1000
+
+while balance > 0:
+    balance -= 250
+    print(f"balance: {balance}")
+
+# Output:
+# balance: 750
+# balance: 500
+# balance: 250
+# balance: 0
+
+# break / continue work in both`,
+
+  fn:
+`def calculate_fee(amount, rate=0.01):
+    """Return the fee for a transaction."""
+    if amount <= 0:
+        return 0
+    fee = amount * rate
+    return fee
+
+
+# Call with positional args
+print(calculate_fee(1000))         # 10.0
+
+# Override the default
+print(calculate_fee(1000, 0.025))  # 25.0
+
+# Or use keyword arguments
+print(calculate_fee(amount=1000))  # 10.0`,
+
+  fizz:
+`def fizzbuzz(n):
+    """Classic FizzBuzz, returns a list."""
+    result = []
+    for i in range(1, n + 1):
+        if i % 15 == 0:
+            result.append("FizzBuzz")
+        elif i % 3 == 0:
+            result.append("Fizz")
+        elif i % 5 == 0:
+            result.append("Buzz")
+        else:
+            result.append(i)
+    return result
+
+# Try it:
+print(fizzbuzz(15))
+# → [1, 2, 'Fizz', 4, 'Buzz', 'Fizz', ...]`,
+};
+
+/* fill code containers */
+document.querySelectorAll(".code[data-code]").forEach(el => {
+  const key = el.dataset.code, file = el.dataset.file || "";
+  el.innerHTML =
+    `<div class="cbar"><span class="cd"></span><span class="cd"></span><span class="cd"></span><span class="cf">${file}</span></div>`+
+    `<pre class="cpre"><code>${highlight(CODES[key] || "")}</code></pre>`;
+});
+
+/* ───────── navigation ───────── */
+const slides = [...document.querySelectorAll(".slide")];
+const total  = slides.length;
+let cur = 0;
+document.getElementById("total").textContent = String(total).padStart(2,"0");
+
+function show(i){
+  cur = Math.max(0, Math.min(total-1, i));
+  slides.forEach((s,n) => s.classList.toggle("active", n===cur));
+  document.getElementById("cur").textContent = String(cur+1).padStart(2,"0");
+  document.getElementById("progress").style.width = ((cur+1)/total*100)+"%";
+  location.hash = cur+1;
+}
+const next = () => show(cur+1);
+const prev = () => show(cur-1);
+
+document.addEventListener("keydown", e => {
+  if (["ArrowRight"," ","PageDown","Enter"].includes(e.key)) { e.preventDefault(); next(); }
+  else if (["ArrowLeft","PageUp","Backspace"].includes(e.key)) { e.preventDefault(); prev(); }
+  else if (e.key === "Home") show(0);
+  else if (e.key === "End")  show(total-1);
+  else if (e.key.toLowerCase() === "f") toggleFs();
+});
+document.getElementById("next").onclick = next;
+document.getElementById("prev").onclick = prev;
+document.getElementById("fs").onclick   = toggleFs;
+
+function toggleFs(){
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.();
+}
+
+/* ───────── fit stage to viewport ───────── */
+const scaler = document.getElementById("scaler");
+function fit(){
+  const sc = Math.min(window.innerWidth/1280, window.innerHeight/720);
+  scaler.style.transform = `scale(${sc})`;
+}
+window.addEventListener("resize", fit);
+fit();
+
+/* fade the keyboard hint after a few seconds */
+setTimeout(() => document.querySelector(".hint")?.classList.add("gone"), 6000);
+
+/* deep-link via hash (also handles browser back/forward) */
+window.addEventListener("hashchange", () => {
+  const n = parseInt(location.hash.replace("#","")) || 1;
+  if (n-1 !== cur) show(n-1);
+});
+const start = parseInt(location.hash.replace("#","")) || 1;
+show(start-1);
+</script>
+</body>
+</html>
