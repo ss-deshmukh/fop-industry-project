@@ -26,3 +26,15 @@ for x in s:
 print(count)
 
 #problem 3
+
+s={"a", "b", "c", "d", "e", "f", "g", "h","i","k" "m", "n", "o", "p" "s", "t", "u", "v", "w", "x", "y", "z"}
+total_vowels = 0
+total_consonants = 0
+vowels_ref = "aeiou"
+for letter in s:
+    if letter in vowels_ref:
+        total_vowels = total_vowels + 1
+    else:
+        total_consonants = total_consonants+1
+print("Total Vowels:", total_vowels)
+print("Total Consonants:", total_consonants)
