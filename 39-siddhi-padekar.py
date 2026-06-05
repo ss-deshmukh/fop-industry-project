@@ -48,3 +48,4 @@ L.pop(4)
 L.pop(2)
 L.pop(0)
 print(L)
+
