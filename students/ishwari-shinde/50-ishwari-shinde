@@ -1,0 +1,18 @@
+#title1
+# pop numbers 
+l=[1,2,3,4,5,6]
+l.pop(4)
+l.pop(2)
+l.pop(0)
+print(l)
+
+#title2
+# even numbers
+def make_even(n):
+    return n if n % 2==0 else n+1
+
+print(make_even(3))
+print(make_even(4))
+print(make_even(5)
+
+ 
