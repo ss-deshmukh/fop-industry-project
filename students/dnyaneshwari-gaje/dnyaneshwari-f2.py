@@ -42,5 +42,23 @@ for x in s:
         c = c + 1
 
 print("Number of consonants =", c)
+#problem 
+letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g',
+           'h', 'i', 'j', 'k', 'l', 'm', 'n',
+           'o', 'p', 'q', 'r', 's', 't', 'u',
+           'v', 'w', 'x', 'y', 'z'}
+
+vowels = set()
+consonants = set()
+
+for ch in letters:
+    if ch in {'a', 'e', 'i', 'o', 'u'}:
+        vowels.add(ch)
+    else:
+        consonants.add(ch)
+
+print("Vowels Set =", vowels)
+print("Consonants Set =", consonants)
+
 
 
