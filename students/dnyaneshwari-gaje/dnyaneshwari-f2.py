@@ -69,5 +69,12 @@ elif guess < num:
     print("Too low")
 else:
     print("Too high")
+#problem
+n=5
+student =[]
+for i in range(n):
+    name = input("enter student name:")
+    student.append(name)
+print (student)
 
 
