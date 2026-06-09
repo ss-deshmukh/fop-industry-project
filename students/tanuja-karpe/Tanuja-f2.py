@@ -19,5 +19,24 @@ v={'a','e','i','o','u'}
 for x in v:
          if x in s:
            count=count+1 
-print(count)       
+print(count)     
+
+#problem3
+num=10
+unum=int(input("guess a num bet 1 to 10="))
+if(num>unum):
+    print("low")
+elif(num<unum):
+    print("high")
+else:
+    print("correct guess")
+
+#problem4
+uinp=0
+n=5 
+student=[]
+for x in range(n):
+    uinp=input("enter a student name=")
+    student.append(uinp)
+print(student)
 
