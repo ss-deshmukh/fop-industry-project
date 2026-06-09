@@ -12,7 +12,7 @@ while True:
         print("incorrect")
     else:
         print("correct ")
- #problem 3  
+#problem 3  
 n=5
 student=[]
 for x in range(n):
