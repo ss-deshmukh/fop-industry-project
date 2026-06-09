@@ -1,0 +1,24 @@
+#problem 1
+
+num = 10
+unum = 0
+
+while unum != num:
+    unum = int(input("Guess the number 10: "))
+
+    if unum != num:
+        print("Incorrect Guess")
+    else:
+        print("Correct ")
+
+#problem 2
+
+students = 5
+student_list = []
+
+for i in range(students):
+    name = input("Enter name of student " + str(i + 1) + ": ")
+    student_list.append(name)
+
+print("\nList of Students:")
+print(student_list)
