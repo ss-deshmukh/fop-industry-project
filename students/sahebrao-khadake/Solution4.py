@@ -5,7 +5,7 @@ students=[]
 for x in range (n):
   name=input (f" Enter the name of student {x+1}:")
   students.append(name)
-print ("students")
+print(students)  # FIX(faculty): print the list variable, not the literal string "students"
 
 #2
 num=10
