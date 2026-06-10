@@ -1,0 +1,38 @@
+# problem2
+a=4
+b=9
+c=19
+def number (n):
+if n % 2==0:
+print("even")
+else:
+print("odd")
+Number(a)
+number(b)
+number(c)
+
+#problem3
+def check e 0(n)
+if n % 2==0:
+  print("even")
+else:
+  print:("odd")
+check(a)
+check(b)
+check(c)
+#problem5
+l = [1, 2, 3, 4, 5, 6]
+
+l.pop(0)
+l.pop(1)
+l.pop(2)
+
+ print(l)
+#problem6
+l = [1, 2, 3, 4, 5, 6]
+
+l.pop(5)  
+l.pop(3)  
+l.pop(1)  
+
+print(l)

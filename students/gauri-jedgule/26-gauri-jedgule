@@ -1,0 +1,21 @@
+# title
+# even or odd numbers
+a=2
+b=26
+c=37
+l=[a,b,c]
+for x in l:
+    if x % 2==0:
+        print(f"[x] is even")
+else:
+    print(f"[x] is odd")
+
+
+# title
+# even number
+i=0
+l=[1,2,3,4,5,6]
+l.pop(4)
+l.pop(2)
+l.pop(0)
+print(l)
