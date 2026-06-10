@@ -1,3 +1,4 @@
+solution3
 nos = 5
 Students = []
 
