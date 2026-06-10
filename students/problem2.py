@@ -7,3 +7,4 @@ for i in range(nos):
     Students.append(name)
 
 print(Students)
+x
