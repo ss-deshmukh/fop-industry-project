@@ -12,3 +12,10 @@ while True:
     else:
         print("correct")
         break
+#prroblem3
+nos=5
+student=[]
+for i in range(nos):
+    name=input("enter name")
+    students.append(name)
+print(students)
