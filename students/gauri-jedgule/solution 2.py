@@ -17,3 +17,16 @@ while True:
     else:
          print("correct")
          break
+
+
+#problem 3
+#student list
+N = 50
+Student = []
+
+for i in range(N):
+    name = input(f"Enter name of student {i+1}: ")
+    Student.append(name)
+
+print("Student List:")
+print(Student)
