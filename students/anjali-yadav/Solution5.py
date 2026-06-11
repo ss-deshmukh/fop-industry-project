@@ -1,5 +1,5 @@
 #problem 1
-def. cub_rec(l,b,h):
+def cub_rec(l,b,h):
     if h == 0:
         s = "rectangle"
         a = l*b
