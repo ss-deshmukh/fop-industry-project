@@ -8,5 +8,5 @@ elif unum > num:
          print ("to high")
 
 else:
-        (" correct ")
+        print("correct")  # FIX(faculty): was just a bare string; added print() so it actually outputs
     
