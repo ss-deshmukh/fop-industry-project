@@ -6,7 +6,7 @@ info = x.split("_")
 
 print(info)
 
-#problem 
+#problem 2
 
 def calculate(l, b, h):
     if (h>0):
