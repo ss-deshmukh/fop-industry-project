@@ -83,7 +83,3 @@ names here as the course runs.
 [Tanuja Karpe](students/tanuja-karpe)
 
 [Ayushka Mutadik](students/aayushka-mutdak/)
-
-
-> Faculty: replace the `_—_` placeholder rows as you recognise students. Link a
-> student's name to their folder, e.g. `[Shreya Deshmukh](students/shreya-deshmukh/)`.
