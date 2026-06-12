@@ -1,12 +1,13 @@
-nos = 5
-Students = []
+#problem 1
 
-for i in range(nos):
-    name = input("Enter name: ")
-    Students.append(name)
+x = "name_surname_age"
 
-print(Students)
-#solution5
+info = x.split("_")
+
+print(info)
+
+#problem 2
+
 def calculate(l, b, h):
     if (h>0):
         volume = l*b*h
