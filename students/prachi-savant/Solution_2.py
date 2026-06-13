@@ -5,12 +5,13 @@ print(area(5, 4))
 #problem 2
 def classify_grade(score):
     if score >= 90:
-        return "A"
+        print AA"
     elif score >= 80:
-        return "B"
+       print "B"
     elif score >= 70:
-        return "C"
+       print "C"
     elif score >= 60:
-        return "D"
+       print "D"
     else:
-        return "F"
+       print "F"
+        
