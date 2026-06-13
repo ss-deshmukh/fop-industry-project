@@ -40,4 +40,11 @@ def sum_to_n(n):
 print(sum_to_n(5))   # 15
 print(sum_to_n(1))   # 1
 print(sum_to_n(10))  # 55
+
+#problem 5
+def table(n)
+for i in range(1,11):
+    print(n*i)
+    table(7)
+
     
