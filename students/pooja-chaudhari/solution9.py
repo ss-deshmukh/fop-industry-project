@@ -28,3 +28,8 @@ def sum_to_n(n):
     return t
 number=int(input("Enter a number="))
 print(sum_to_n(number))
+#problem 4
+def times_table(n):
+    for i in range(1,11):
+        print(n*i)
+times_table(7)
