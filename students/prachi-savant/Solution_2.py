@@ -26,4 +26,18 @@ def is_leap_year(year):
 
 year= int(input("enter a year:"))
 is_leap_year(year)
+
+
+#problem 4
+def sum_to_n(n):
+    total = 0  # running total
+
+    for i in range(1, n + 1):
+        total += i
+
+    return total 
+    
+print(sum_to_n(5))   # 15
+print(sum_to_n(1))   # 1
+print(sum_to_n(10))  # 55
     
