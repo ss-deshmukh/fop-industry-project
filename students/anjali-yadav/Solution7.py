@@ -14,3 +14,10 @@ def classify_grade(score):
         print("pass")
 score=int(input("Enter score:"))   
 classify_grade(score)
+#problem 2
+def sum(n):
+    total=0
+    for x in range(1,n+1):
+        total+=x
+    return(total)
+print(sum(5))
