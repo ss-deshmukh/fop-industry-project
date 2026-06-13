@@ -11,7 +11,7 @@ def classify_grade():
         return "D"
     else:
         return "F"
-#sai
+#rushi
 classify_grade()
 grade = classify_grade()
 print("Grade:", grade)
@@ -20,5 +20,5 @@ print("Grade:", grade)
 year=int(input("enter year you want to cheak leap or not"))
 if year%4==0 and (year%100!=0 or year%400==0):
     print(f"{year} is leap year")
-else: #sai
+else: #rushi
     print(f"{year} is not leap")
