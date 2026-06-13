@@ -14,4 +14,5 @@ def classify_grade(score):
        print "D"
     else:
        print "F"
+        class_g(score)
         
