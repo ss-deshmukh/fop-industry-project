@@ -29,3 +29,8 @@ def lp(y):
         print("False")
 year=int(input("Enter a year: "))
 lp(year)
+#problem 4
+def times_table(n):
+    for i in range(1,11):
+        print(n*i)
+times_table(7)
