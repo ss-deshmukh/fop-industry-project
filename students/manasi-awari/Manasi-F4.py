@@ -10,8 +10,8 @@ def classify_grade(score):
     else:
         return "F"
 
-print(classify_grade(95))
-print(classify_grade(85))
+print(classify_grade(97))
+print(classify_grade(83))
 print(classify_grade(75))
-print(classify_grade(65))
-print(classify_grade(45))
+print(classify_grade(64))
+print(classify_grade(46))
