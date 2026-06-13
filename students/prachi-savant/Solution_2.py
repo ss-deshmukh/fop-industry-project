@@ -18,11 +18,12 @@ def classify_grade(score):
         class_g(score)
 
 #problem 3
-def lp(y):
-    if y % 4 == 0 and y % 100 !=0:
-        print("True")
+def is_leap_year(year):
+    if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0):
+        print(True)
     else:
-        print("False")
-        year =int(input("enter a yr")
-                  lp(year)
-        
+        print(False)
+
+year= int(input("enter a year:"))
+is_leap_year(year)
+    
