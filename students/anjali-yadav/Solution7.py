@@ -21,3 +21,11 @@ def sum(n):
         total+=x
     return(total)
 print(sum(5))
+#problem 3
+def lp(y):
+    if y%4==0 and y%100!=0 or y%400==0:
+        print("True")
+    else:
+        print("False")
+year=int(input("Enter a year: "))
+lp(year)
