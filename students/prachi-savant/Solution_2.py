@@ -16,4 +16,13 @@ def classify_grade(score):
        print "F"
         score = int(input("enter your score"))
         class_g(score)
+
+#problem 3
+def lp(y):
+    if y % 4 == 0 and y % 100 !=0:
+        print("True")
+    else:
+        print("False")
+        year =int(input("enter a yr")
+                  lp(year)
         
