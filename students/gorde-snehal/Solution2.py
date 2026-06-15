@@ -5,7 +5,6 @@ s={'a','b','c','d','e','f','g',
    ,'w','x','y','z',}
 count=0
 for x in s:
-    for x not in['a','e','i','o','u'
-                ]:
-          count=count +1
-print("no.of consonanta=", counts in)
+    if x not in ['a','e','i','o','u']:  # FIX(faculty): was "for x not in[...]" -> invalid syntax; check each letter against the vowels
+        count=count +1
+print("no.of consonanta=", count)  # FIX(faculty): print the count variable (was "counts in", which is undefined)
