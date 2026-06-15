@@ -4,7 +4,7 @@ while i<=10:
   sum= sum+i
   i=i+1
 print(sum)
-#problem 
+#problem 2
 a=4
 b=9
 c=19
@@ -16,7 +16,7 @@ def numbers(n):
 numbers(a)
 numbers(b)
 numbers(c)
-#problem 
+#problem 3
 a=4
 b=9
 c=19
@@ -28,31 +28,9 @@ def numbers (n):
 numbers(a)
 numbers(b)
 numbers(c)
-#problem 
+#problem 4
 a=[1,2,3]
 def print_list(list):
-    for x inlist:
+    for x in list:
         print(x)
 print_list(a)
-#problem 
-i=1
-L=[1,2,3,4,5,6]
-L.pop(0)
-L.pop(1)
-L.pop(2)
-print(L)
-#problem 
-i=0
-L=[1,2,3,4,5,6]
-L.pop(4)
-L.pop(2)
-L.pop(0)
-print(L)
-#problem
-d={Ram=30,Vijay=40,Radha=60}
-print(d["Vijay"]) 
-#problem
-d={"Ram"=30, "Vijay"=40, "Radha"=60}
-d. update ({"Tom"=2, "Don"=10}) 
-print(d) 
- 
