@@ -29,3 +29,21 @@ def print_triangle(height):
         row += 1
 
 print_triangle(5)
+
+#problem 4
+import random
+
+secret = random.randint(1, 100)
+
+print("I am thinking of a number between 1 and 100.")
+
+while True:
+    guess = int(input("Enter your guess: "))
+
+    if guess < secret:
+        print("Too low!")
+    elif guess > secret:
+        print("Too high!")
+    else:
+        print(" Correct! You guessed the number.")
+        break
