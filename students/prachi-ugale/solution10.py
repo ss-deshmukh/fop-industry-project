@@ -13,7 +13,7 @@ def play_game():
         elif guess < SECRET:
             print("Too low!")
         else:
-            print(f"Correct! You got it in {guesses} tries.")
+            print("Correct! You got it in {guesses} tries.")
             break
 
 play_game()
