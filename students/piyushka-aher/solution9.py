@@ -13,3 +13,5 @@ def print_triangle(height):
         print("*"*row)
         row=row+1
 print_triangle(10)
+
+
