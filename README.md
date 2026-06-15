@@ -73,3 +73,13 @@ a visible portfolio on their GitHub profile.
 - 25% — Capstone Tiny Blockchain (Module 3)
 
 No formal external exam. See `syllabus/COURSE_DESIGN.md` for the full design.
+
+## 🏆 Hall of Fame
+
+Recognising students who go above and beyond — clean code, sharp problem-solving,
+helping classmates, and tackling the optional ★ stretch problems. Faculty adds
+names here as the course runs.
+
+[Tanuja Karpe](students/tanuja-karpe)
+
+[Ayushka Mutadik](students/aayushka-mutdak/)
