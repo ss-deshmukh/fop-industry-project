@@ -4,3 +4,9 @@ def countdown(n):
         print(n)
         n -= 1
     print("Liftoff!")
+Solution9.py
+def Triangle(h):
+    for x in range(1, h + 1):
+        print('*' * x)
+
+Triangle(5)
