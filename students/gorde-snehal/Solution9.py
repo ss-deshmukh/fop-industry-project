@@ -1,10 +1,12 @@
-Write a function countdown(n) that uses a while loop to count down from n to 1, printing one number per line, then prints Liftoff!.
+# countdown 
 def countdown(n):
     while n >= 1:
         print(n)
         n -= 1
     print("Liftoff!")
-Solution9.py
+
+
+#Triangle
 def Triangle(h):
     for x in range(1, h + 1):
         print('*' * x)
