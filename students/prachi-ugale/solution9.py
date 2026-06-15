@@ -1,4 +1,4 @@
-#probkem 1
+#problem 1
 n=int(input("enter your number="))
 def countdown(n):
     while n>=1:
