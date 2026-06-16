@@ -45,19 +45,15 @@ def is_prime(n):
     return True
 
 #problem5
-import random
 
-secret = random.randint(1, 100)
+secret = 7
 
-print("I am thinking of a number between 1 and 100.")
-
-while True:
-    guess = int(input("Enter your guess: "))
-
-    if guess < secret:
-        print("Too low!")
-    elif guess > secret:
-        print("Too high!")
-    else:
-        print(" Correct! You guessed the number.")
-        break
+def play_game(i):   
+    while True:     
+        if i == secret:
+            print("correct")
+            break
+        else:
+            print("incorrect")
+            break 
+play_game(7)
