@@ -38,3 +38,15 @@ def name():
                 A=agr()
                 C=city ()
                 print(f"{N}, {A}, {C}")
+
+
+#problem 3
+#rectangle
+def rectangle(width, height):
+    area = width * height
+    perimeter = 2 * (width + height)
+    return area, perimeter
+
+a, p = rectangle(3, 4)
+print(a)   
+print(p)  
