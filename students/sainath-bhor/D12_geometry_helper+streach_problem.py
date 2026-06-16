@@ -1,46 +1,35 @@
-def rectangle():
-    l=int(input("enter length of rectangle -->"))
-    b=int(input("enter breadth of rectangle -->"))
-    area=l*b
-    perimeter=2*(l+b)
+def rectangle(width,height):
+    area=width*height
+    perimeter=2*(width+height)
     return area,perimeter
-def circle():
-    r=int(input("enter radius of circle -->"))
-    pi=3.142
-    area=pi*r*r
-    circumference=2*pi*r
+def circle(radius,pi=3.14159):
+    area=pi*radius*radius
+    circumference=2*pi*radius
     return area,circumference
-def box():
-    while True:
-        l=int(input("enter length of box -->"))
-        w=int(input("enter width of box -->"))
-        h=int(input("enter height of box -->"))
-        if (h==0 or w==0 or l==0):
-            print("this shape is not cube, enter again")
-        else:
-            break
-    volume=l*w*h
-    surf_area=2*(l*w+l*h+w*h)
-    return volume,surf_area
-def main(): #sai
-    x=input("your shape is(rectangle/circle/cube) -->")
-    while True:
-        if x=="rectangle":
-            area,perimeter=rectangle()
-            print("area : ",area)
-            print("perimeter : ",perimeter)
-            break
-        elif x=="circle":
-            area2,circumference=circle()
-            print("area : ",area2)
-            print("circumference : ",circumference)
-            break #sai
-        elif x=="cube":
-            volume,surf_area=box()
-            print("volume : ",volume)
-            print("surface area : ",surf_area)
-            break
-        else:
-            x=input("type correctly(rectangle/circle/cube) -->")
+def box(length,width,height):
+    volume=length*width*height
+    surface_area=2*(length*width+length*height+width*height)
+    return volume,surface_area
+def main():
+    shape=input("Your shape is (rectangle/circle/cube) --> ")
+    if shape== "rectangle":
+        w=int(input("Enter width --> "))
+        h=int(input("Enter height --> "))
+        area, perimeter = rectangle(w, h)
+        print("Area:", area)
+        print("Perimeter:", perimeter)
+    elif shape=="circle":
+        r=int(input("Enter radius --> "))
+        area,circumference = circle(r)
+        print("Area:",area)
+        print("Circumference:",circumference)
+    elif shape=="cube":
+        l= int(input("Enter length --> "))
+        w= int(input("Enter width --> "))
+        h= int(input("Enter height --> "))
+        volume, surface_area = box(l, w, h)
+        print("Volume:", volume)
+        print("Surface Area:", surface_area)
+    else:
+        print("Invalid shape")
 main()
-            
