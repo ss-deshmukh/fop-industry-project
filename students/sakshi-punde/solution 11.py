@@ -36,6 +36,6 @@ print(round(c,2))
 a,p=rectangle(10,2)
 print(a)
 print(p)
-#problem 3
+
 
 
