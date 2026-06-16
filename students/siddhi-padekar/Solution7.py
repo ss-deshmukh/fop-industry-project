@@ -1,4 +1,4 @@
-#solution7 
+#solution7
 def countdown(n):
     while n >= 1:
         print(n)
