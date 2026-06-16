@@ -13,6 +13,7 @@ a,b,c=cub_rec(2,3,4)
 print("shape= ",a)
 print("volume= ",b)
 print("perimeter= ",c)
+
 #problem2
 info=input("enter your name, surname, age = ").split()
 print(info)
