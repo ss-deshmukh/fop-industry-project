@@ -1,34 +1,3 @@
-Skip to content
-Faculty-of-Polytechnic
-Repository navigation
-Code
-Issues
-Pull requests
-31
- (31)
-Faculty-of-Polytechnic/lab/module_1_foundations/D13_scope_bughunt
-/starter.py
-ss-deshmukh
-ss-deshmukh
-last week
-44 lines (34 loc) · 1.49 KB
-
-Code
-
-Blame
-# D13 — Scope Bug-Hunt: the broken shopping cart
-#
-# Read the full brief in problem.md.
-#
-# This program RUNS, but it prints the WRONG total. The bug is about SCOPE:
-# the functions lean on a GLOBAL variable called `total` instead of taking
-# their inputs as PARAMETERS and handing back results with RETURN.
-#
-# Your job: find the buggy spots (marked with  # BUG:) and refactor so that
-# each function takes what it needs as parameters and returns its result.
-# No function should read or overwrite the global `total`.
-
-# A single shared "running total" that everyone pokes at. This is the trap.
 total = 0
 
 
@@ -38,7 +7,7 @@ total = 0
 #       return  running_total + price   (no `global`, no reading the global).
 def add_item(price):
     global total
-    total = price          # overwrites the running total every single time!
+    total += price          # overwrites the running total every single time!
     return total
 
 
@@ -46,7 +15,7 @@ def add_item(price):
 #      cart total as a PARAMETER. If `total` changes elsewhere, this lies.
 # TODO: refactor to  def apply_tax(cart_total):  and return cart_total * 1.05
 def apply_tax():
-    return total * 1.05
+    return total * 5/100
 
 
 def main():
