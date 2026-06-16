@@ -1,4 +1,5 @@
-#problem 1total = 0
+#problem 1
+total = 0
 
 def add_item(price):
     global total

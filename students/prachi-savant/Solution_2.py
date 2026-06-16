@@ -2,20 +2,21 @@ def area(l, b):
     return l * b
 
 print(area(5, 4))
+
 #problem 2
 def classify_grade(score):
     if score >= 90:
-        print AA"
+        return "A"
     elif score >= 80:
-       print "B"
+        return "B"
     elif score >= 70:
-       print "C"
+        return "C"
     elif score >= 60:
-       print "D"
+        return "D"
     else:
-       print "F"
-        score = int(input("enter your score"))
-        class_g(score)
+        return "F"
+
+print(classify_grade(85))
 
 #problem 3
 def is_leap_year(year):
@@ -24,8 +25,7 @@ def is_leap_year(year):
     else:
         print(False)
 
-year= int(input("enter a year:"))
-is_leap_year(year)
+is_leap_year(2024)
 
 
 #problem 4
@@ -35,16 +35,16 @@ def sum_to_n(n):
     for i in range(1, n + 1):
         total += i
 
-    return total 
-    
+    return total
+
 print(sum_to_n(5))   # 15
 print(sum_to_n(1))   # 1
 print(sum_to_n(10))  # 55
 
 #problem 5
-def table(n)
-for i in range(1,11):
-    print(n*i)
-    table(7)
+def table(n):
+    for i in range(1, 11):
+        print(n * i)
 
-    
+table(7)
+
