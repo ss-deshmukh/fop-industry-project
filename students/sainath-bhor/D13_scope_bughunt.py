@@ -1,18 +1,17 @@
-total=0
-def add_item(price):
-    global total
-    total=total+price
-    return total
-def apply_tax():
-    n=int(input("enter % of tax"))
-    global t
-    t=total*n/100
-    return t
-def main(): #sai
-    add_item(40)
-    add_item(25)
-    add_item(15)
-    print("price :",total)
-    print("tax :",apply_tax())
-    print("total :",total+t)
+def add_item(running_total, price):
+    return running_total + price
+
+def apply_tax(cart_total):
+    return cart_total * 1.05
+
+def main():
+    total = 0
+
+    total = add_item(total, 40)
+    total = add_item(total, 25)
+    total = add_item(total, 15)
+
+    print("Items added. Cart total:", total)
+    print("With 5% tax:", f"{apply_tax(total):.2f}")
+
 main()
