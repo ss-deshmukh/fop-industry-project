@@ -1,19 +1,18 @@
-s={"a", "b", "c", "d", "e", "f", "g", 
-   "h", "i", "j", "k", "l", "m", "n", 
-   "o", "p", "q", "r", "s", "t", "u", 
-   "v", "w", "x", "y", "z"}
-count=0
-for x in s:
-    if x=="a":
-        continue
-    elif x=="e":
-        continue
-    elif x=="i":
-        continue
-    elif x=="o":
-        continue
-    elif x=="u":
-        continue
-    else :
-        count=count+1
-print(count)
+def about_me():
+    name = input("What is your name? ")
+    age = int(input("How old are you? "))
+    city = input("Which city are you from? ")
+    language = input("Favourite programming language? ")
+    years = int(input("How many years have you been coding? "))
+    print()
+    print("=" * 40)
+    print("            ABOUT ME")
+    print("=" * 40)
+    print(f"Name:      {name}")
+    print(f"Age:       {age}")
+    print(f"City:      {city}")
+    print(f"Codes in:  {language}")
+    print(f"Coding for {years} years.")
+    print("=" * 40)
+
+about_me()
