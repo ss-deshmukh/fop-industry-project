@@ -6,7 +6,7 @@ print("guess num  1 & 100!")
 
 while True:
     guess = int(input("guess: "))
-    
+
     if guess < prsonal:
         print("T low!")
     elif guess > prsonal:
