@@ -1,24 +1,29 @@
-def ask_text(ans):
-    return input(ans)
-def ask_int(ans):
-    return int(input(ans))
-def info(): #sai
-    name=ask_text("enter your name -->")
-    age=ask_int("enter your age -->")
-    city=ask_text("enter your city -->")
-    language=ask_text("enter your fav coding language -->")
-    year=ask_int("from how many years are you coding -->")
-    age=(f"{age}")
-    year=(f"{year}")
-    bio="name         :"+name+"\n"+"age          :"+age+"\n"+"city         :"+city+"\n"+"fav language :"+language+"\n"+"coding from "+year+"years"+"\n"
-    return bio,name
-def greeter(name):
-    return f"hey {name}, nice to meet you"
+def ask_text(prompt):
+    return input(prompt)
+
+def ask_int(prompt):
+    return int(input(prompt))
+
+def build_bio(name, age, city, language, years):
+    divider = "=" * 40
+    return (
+        f"\n{divider}\n"
+        f"            ABOUT ME\n"
+        f"{divider}\n"
+        f"Name:      {name}\n"
+        f"Age:       {age}\n"
+        f"City:      {city}\n"
+        f"Codes in:  {language}\n"
+        f"Coding for {years} years.\n"
+        f"{divider}"
+    )
+
 def main():
-    bio,name=info() #sai
-    headline=greeter(name)
-    print(headline)
-    print("="*40,"\n","                ABOUT ME","\n",'='*39)
-    print(bio)
-    print("="*40)
+    name = ask_text("What is your name? ")
+    age = ask_int("How old are you? ")
+    city = ask_text("Which city are you from? ")
+    language = ask_text("Favourite programming language? ")
+    years = ask_int("How many years have you been coding? ")
+    print(build_bio(name, age, city, language, years))
+
 main()
