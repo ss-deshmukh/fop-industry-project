@@ -18,3 +18,4 @@ print("Perimeter =",c)
 #problem 2
 info= input("Enter your name,surname,age=").split()
 print(info)
+
