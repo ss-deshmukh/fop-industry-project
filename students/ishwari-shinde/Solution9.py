@@ -38,6 +38,7 @@ def name():
                 A=agr()
                 C=city ()
                 print(f"{N}, {A}, {C}")
+                
 
 
 #problem 3
@@ -50,3 +51,11 @@ def rectangle(width, height):
 a, p = rectangle(3, 4)
 print(a)   
 print(p)  
+
+
+#problem 4
+#circle
+
+def circle(r)
+ a=π*(r**2) pi=3.14
+ return (a)
