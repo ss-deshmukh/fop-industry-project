@@ -1,23 +1,17 @@
+import random
+
 def guess_game():
-    a=29
-    tries=0
+    secret = random.randint(1, 100)
+    tries = 0
     while True:
-        x=int(input("guess secret number -->"))
-        if x>39:
-            print("your guess is too high")
-            tries=tries+1
-        elif x>29:
-            print("you should go little lower")
-            tries=tries+1
-        elif x<19:
-            print("your guess is too low")
-            tries=tries+1
-        elif x<29:
-            print("you should go little higher")
-            tries=tries+1
-        else: #sai
-            print("correct guess you got it")
-            tries=tries+1
+        guess = int(input("Guess the number (1-100): "))
+        tries += 1
+        if guess > secret:
+            print("Too high!")
+        elif guess < secret:
+            print("Too low!")
+        else:
+            print(f"Correct! You got it in {tries} tries.")
             break
-    print(f"you guess number in {tries} guesses")
+
 guess_game()
