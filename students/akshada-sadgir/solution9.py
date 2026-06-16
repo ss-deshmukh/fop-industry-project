@@ -5,7 +5,7 @@ def play_game():
 
     while True:
         guess = int(input("Enter your guess: "))
-        guesses =+1
+        guesses += 1
 
         if guess > SECRET:
             print("Too high!")
