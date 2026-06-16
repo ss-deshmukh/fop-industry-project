@@ -12,9 +12,7 @@ def main():
     taxed_total = apply_tax(total)
     print("With tax:", taxed_total)
 main()
-
 #problem 2
-
 def rectangle(width,height):
     area=width*height
     perimeter=2*(width+height)
@@ -26,9 +24,7 @@ print(p)
 a,p=rectangle(10,2)
 print(a)
 print(p)
-
 #problem 3
-
 def circle(r,pi=3.14159):
     a=pi*r*r
     circumference=2*pi*r
