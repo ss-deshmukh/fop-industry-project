@@ -1,30 +1,21 @@
-#1
-def stars_tri():
-    n=int(input("enter number of rows -->"))
-    symbol=str(input("enter symbol -->"))
-    for a in range(1,n+1):
-        print(symbol*a) #sai
-stars_tri()
+def print_triangle(height):
+    for row in range(1, height + 1):
+        print('*' * row)
 
-#2
-def prime_cheak():
-    n=int(input("enter number to chek prime or not -->"))
-    for a in range(2,n):
-        if n%a==0: #sai
-            print(n," is not prime number")
-            return
-    print(n," is prime number")
-prime_cheak()
+def is_prime(n):
+    if n < 2:
+        return False
+    for d in range(2, n):
+        if n % d == 0:
+            return False
+    return True
 
-#streach_problem😉
-def primes_():
-    n=int(input("enter highest number -->"))
-    for x in range(2,n+1):
-        isprime=True #sai
-        for a in range(2,x):
-            if x%a==0:
-                isprime=False
-                break
-        if isprime:
+def primes_up_to(limit):
+    for x in range(2, limit + 1):
+        if is_prime(x):
             print(x)
-primes_()
+
+print_triangle(5)
+print(is_prime(7))   # True
+print(is_prime(10))  # False
+primes_up_to(20)
