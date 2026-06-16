@@ -1,20 +1,18 @@
-#problem1
 def calculate(l, b, h):
-    if (h>0):
-        volume = l*b*h
-        perimeter = 4 * (l+b+h)
-        return ( volume , perimeter)
-    
+    if h > 0:
+        volume = l * b * h
+        surface_area = 2 * (l*b + l*h + b*h)
+        perimeter = 4 * (l + b + h)
+        return volume, surface_area, perimeter
     else:
-        area = l*b
-        perimeter = 2 * (l+b)
-        return ( area, perimeter)
+        return None
 
-
-
-print("Cuboid:", calculate(5, 3, 4))
-print("Rectangle:", calculate(5, 3,0))
-#problem2
-info="aayushka_mutdak_20"
-result=info.split("_")
-print(result)
+l = int(input("Enter length: "))
+b = int(input("Enter breadth: "))
+h = int(input("Enter height: "))
+result = calculate(l, b, h)
+if result:
+    volume, surface_area, perimeter = result
+    print(f"Volume: {volume}")
+    print(f"Surface area: {surface_area}")
+    print(f"Perimeter: {perimeter}")
