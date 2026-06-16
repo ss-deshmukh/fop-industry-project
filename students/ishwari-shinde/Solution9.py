@@ -1,3 +1,6 @@
+#problem 1
+#add item
+
 def add_item(total, price):
     return total + price
 
@@ -18,3 +21,20 @@ def main():
 
 
 main()
+
+#problem 2
+#information 
+def name():
+    n=input ("enter name:")
+    return (n)
+    def age():
+        a=input ("enter age:")
+        return (a)
+        def city ():
+            c=input ("enter city:")
+            return(c)
+            def main():
+                N=name()
+                A=agr()
+                C=city ()
+                print(f"{N}, {A}, {C}")
