@@ -15,3 +15,7 @@ def l_g(avg):
     else:
         return"F"
 print(l_g(35))
+#problem3
+def fo_ma(m1,m2,m3):
+    return(f"{m1},{m2},{m3}")
+print(fo_ma(20,4,5))
