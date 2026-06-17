@@ -1,27 +1,3 @@
-nos = 5
-Students = []
-
-for i in range(nos):
-    name = input("Enter name: ")
-    Students.append(name)
-
-print(Students)
-#solution5
-def calculate(l, b, h):
-    if (h>0):
-        volume = l*b*h
-        perimeter = 4 * (l+b+h)
-        return ( volume , perimeter)
-
-    else:
-        area = l*b
-        perimeter = 2 * (l+b)
-        return ( area, perimeter)
-
-
-
-print("Cuboid:", calculate(5, 3, 4))
-print("Rectangle:", calculate(5, 3,0))
 i=1
 sum=0
 while i<=10:
@@ -90,4 +66,13 @@ for x in s:
     if x not in ('a','e','i','o','u'):
         c += 1
 
-print(c)
+print(c)solution3
+nos = 5
+Students = []
+
+for i in range(nos):
+    name = input("Enter name: ")
+    Students.append(name)
+
+print(Students)
+x
