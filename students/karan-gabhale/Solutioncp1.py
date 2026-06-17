@@ -24,3 +24,9 @@ def classify_result(a):
         return("d")
     elif a<60:
         return("F")
+
+#problem 4
+def  format_marks(m1, m2, m3):
+     return(f"{m1},{ m2},{ m3}")
+
+
