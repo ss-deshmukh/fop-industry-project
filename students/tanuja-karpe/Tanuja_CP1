@@ -20,6 +20,6 @@ def grade(result):
     else: 
           return("F")
 def format(m1,m2,m3):
-        return(format("m1,m2,m3"))
+        return(f"{m1},{m2},(m3}"))
  
     
