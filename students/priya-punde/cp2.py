@@ -86,3 +86,18 @@ def collect_all_subjects():
     return subjects
 subjects = collect_all_subjects()
 print(subjects)
+#problem8
+def build_subject_row(name, m1, m2, m3):
+    avg = (m1 + m2 + m3) / 3
+    if avg >= 75:
+        grade = "A"
+        result = "DISTINCTION"
+    elif avg >= 40:
+        grade = "C"
+        result = "PASS"
+    else:
+        grade = "F"
+        result = "FAIL"
+    return f"{name:<16} | {m1:>3} | {m2:>3} | {m3:>3} | {avg:>4.1f} | {grade:^5} | {result}"
+row = build_subject_row("Maths", 85, 90, 78)
+print(row)
