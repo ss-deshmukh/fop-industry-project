@@ -134,3 +134,17 @@ def print_menu():
     print("3. Search Subject")
     print("4. Exit")
 print_menu()
+#problem11
+def print_history(history):
+    if len(history) == 0:
+        print("No history yet.")
+    else:
+        print("--- Session History ---")
+        for i in range(len(history)):
+            print(f"[{i + 1}] {history[i]}")
+        print("----------------------")
+history = []
+print_history(history)  
+history.append("Added 1 subject(s)")
+history.append("Viewed report")
+print_history(history)  
