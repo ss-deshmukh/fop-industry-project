@@ -70,3 +70,19 @@ def ask_yes_no(question):
 
 result = ask_yes_no("Continue? (y/n): ")
 print(result)
+#problem7
+def collect_all_subjects():
+    subjects = []
+    while True:
+        name = input("Subject name: ")
+        m1 = int(input("Mark 1: "))
+        m2 = int(input("Mark 2: "))
+        m3 = int(input("Mark 3: "))
+        subjects.append((name, m1, m2, m3))
+
+        more = input("Add another subject? (y/n): ")
+        if more == "n":
+            break
+    return subjects
+subjects = collect_all_subjects()
+print(subjects)
