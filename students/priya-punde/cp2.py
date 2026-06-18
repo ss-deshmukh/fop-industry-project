@@ -101,3 +101,28 @@ def build_subject_row(name, m1, m2, m3):
     return f"{name:<16} | {m1:>3} | {m2:>3} | {m3:>3} | {avg:>4.1f} | {grade:^5} | {result}"
 row = build_subject_row("Maths", 85, 90, 78)
 print(row)
+#problem9
+def build_subject_row(name, m1, m2, m3):
+    avg = (m1 + m2 + m3) / 3
+    if avg >= 40:
+        grade = "P"
+        result = "PASS"
+    else:
+        grade = "F"
+        result = "FAIL"
+    return f"{name:<10} {m1:>3} {m2:>3} {m3:>3} {avg:>5.1f} {grade:^5} {result}"
+def print_report(subjects):
+    print("GRADE REPORT")
+    print("------------------------------")
+    total = 0
+    for s in subjects:
+        name, m1, m2, m3 = s
+        print(build_subject_row(name, m1, m2, m3))
+        total += (m1 + m2 + m3) / 3
+    print("------------------------------")
+    print("Overall Avg:", total / len(subjects))
+subjects = [
+    ("Maths", 85, 90, 78),
+    ("Physics", 30, 28, 35)
+]
+print_report(subjects)
