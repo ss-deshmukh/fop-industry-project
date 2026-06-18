@@ -1,4 +1,4 @@
-#cp1
+#CP2
 def ask_text():
     while True:
         sub_name = input("Enter subject name?-")
@@ -16,7 +16,7 @@ def ask_marks():
             break
         else: 
             print("Enter whole number only")
-#cp2
+
 
 def ask_y_n(i):
     while True:
@@ -29,7 +29,7 @@ def ask_y_n(i):
             break
         else:
             print("type only y/n only")
-#cp3
+
 
 def collect():
     TN=ask_text()
@@ -38,23 +38,3 @@ def collect():
     AM3=ask_marks()
     return(TN,AM1,AM2,AM3)
 
-#CP4
-
-Max_subject=5
-def collect_all():
-    subject=[]
-    entry=collect()
-    subject.append(entry)
-    print(subject)
-    while len(subject)<Max_subject:
-        if ask_y_n("Enter another subject-"):
-            ele = collect()
-            print(ele)
-            subject.append(ele)
-            print(subject)
-        else:
-            break
-    if len(subject)==Max_subject:
-        return("maximum subject reached")
-    return(subject)
-collect_all()
