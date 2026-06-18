@@ -16,6 +16,18 @@ def ask_text(prompt):
             return"Can't be empty — try again."
 ask_text("a")
 #problem2
+pass_mark = 35
+distinction_mark = 75
+def classify_result(avg):
+    if avg >= distinction_mark:
+        return "DISTINCTION"
+    elif avg >= pass_mark:
+        return "PASS"
+    else:
+        return "FAIL"
+
+print(classify_result(84.3))
+#problem2
 def ask_mark(prompt):
     while True:
         try:
