@@ -1,4 +1,4 @@
-#problem 1 
+jii#problem 1 
 def ask_text(prompt):
     while True:
         text = input(prompt).strip()
@@ -60,3 +60,52 @@ def collect_all_sub():
         print("Maximum 5 sub reached.")
 
     return sub
+
+
+#problem 6
+
+def print_menu():
+    print(" MENU ")
+    print("1. Add Subject")
+    print("2. View Report")
+    print("3. Clear Data")
+    print("4. Exit")
+
+print_menu()
+
+
+#problem 7
+
+def print_h(h):
+    if len(h) == 0:
+        print("No h yet.")
+    else:
+        print(" Session H ")
+        for i in range(len(h)):
+            print(f"[{i + 1}] {h[i]}")
+        print("-")
+
+h = ["Added 1 subject(s)", "Viewed report"]
+
+print_h(h)
+
+
+#problem 8
+
+def print_menu():
+    print("1. Add subjects")
+    print("2. View report")
+    print("3. View history")
+    print("4. Exit")
+print_menu()
+
+def print_history(history):
+    if len(history) == 0:
+        print("No history yet.")
+    else:
+        for i in range(len(history)):
+            print(f"[{i+1}] {history[i]}")
+            print("-")
+history=["added 1 subject(s)","viewed report"]
+print_history(history)
+
