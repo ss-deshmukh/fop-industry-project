@@ -1,40 +1,37 @@
-#CP2
-def ask_text():
+def ask_text(prompt):
     while True:
-        sub_name = input("Enter subject name?-")
-        if sub_name == "":
-            print("Can't be empty. Try again.")
-        else:
-            return(sub_name)
-            break
+        text = input(prompt)
+        if text:
+            return text
+        print("Can't be empty — try again.")
+
+
+def ask_mark(prompt):
+    while True:
+        text = input(prompt)
+        if not text.isdigit():
+            print("Please enter a whole number.")
+            continue
+        mark = int(text)
+        if 0 <= mark <= 100:
+            return mark
+        print("Mark must be between 0 and 100.")
+
+
+def ask_yes_no(question):
+    while True:
+        answer = input(question).strip().lower()
+        if answer == "y":
+            return True
+        if answer == "n":
+            return False
+        print('Please type "y" or "n".')
+
+
+def collect_one_subject():
+    name = ask_text("Subject name: ")
+    m1 = ask_mark("  Mark 1 (0-100): ")
+    m2 = ask_mark("  Mark 2 (0-100): ")
+    m3 = ask_mark("  Mark 3 (0-100): ")
+    return name, m1, m2, m3
     
-def ask_marks(): 
-    while True: 
-        user_input = input("Enter your marks 1-100: ") 
-        if user_input.isdigit(): 
-            return(user_input)
-            break
-        else: 
-            print("Enter whole number only")
-
-
-def ask_y_n(i):
-    while True:
-        user_input=input(i)
-        if user_input == "y":
-            return(True)
-            break
-        elif user_input == "n":
-            return(False)
-            break
-        else:
-            print("type only y/n only")
-
-
-def collect():
-    TN=ask_text()
-    AM1=ask_marks()
-    AM2=ask_marks()
-    AM3=ask_marks()
-    return(TN,AM1,AM2,AM3)
-
