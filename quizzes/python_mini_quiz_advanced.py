@@ -8,8 +8,8 @@ questions = [
             "   y.append(4)\n"
             "   print(x)"
         ),
-        "options": ["A) [1, 2, 3]", "B) [1, 2, 3, 4]", "C) Error", "D) [4]"],
-        "answer": "B"
+        "options": ["A) Error", "B) [1, 2, 3]", "C) [1, 2, 3, 4]", "D) [4]"],
+        "answer": "C"
     },
     {
         "question": (
@@ -18,30 +18,30 @@ questions = [
             "   a[2].append(5)\n"
             "   print(a)"
         ),
-        "options": ["A) Error - tuples are immutable", "B) (1, 2, [3, 4, 5])", "C) (1, 2, [3, 4])", "D) Can't modify tuples"],
-        "answer": "B"
+        "options": ["A) Can't modify tuples", "B) Error - tuples are immutable", "C) (1, 2, [3, 4])", "D) (1, 2, [3, 4, 5])"],
+        "answer": "D"
     },
     {
         "question": "What's the difference between x = 5 and x = 5.0 in terms of memory?",
-        "options": ["A) No difference", "B) 5 takes less memory than 5.0", "C) 5.0 takes less memory", "D) Depends on Python version"],
-        "answer": "B"
+        "options": ["A) 5.0 takes less memory", "B) No difference", "C) Depends on Python version", "D) 5 takes less memory than 5.0"],
+        "answer": "D"
     },
 
     # ── Advanced Operators & Precedence ──
     {
         "question": "What is the output of: print(2 + 3 * 4 - 5 / 2)?",
-        "options": ["A) 9.5", "B) 11.5", "C) 13.5", "D) 6.0"],
-        "answer": "B"
+        "options": ["A) 6.0", "B) 9.5", "C) 11.5", "D) 13.5"],
+        "answer": "C"
     },
     {
         "question": "What does: 5 == 5.0 and 5 is 5.0 evaluate to?",
-        "options": ["A) True, True", "B) True, False", "C) False, True", "D) False, False"],
-        "answer": "B"
+        "options": ["A) False, False", "B) True, True", "C) True, False", "D) False, True"],
+        "answer": "C"
     },
     {
         "question": "What is the result of: not (True and False or True)?",
-        "options": ["A) True", "B) False", "C) None", "D) Error"],
-        "answer": "B"
+        "options": ["A) Error", "B) True", "C) False", "D) None"],
+        "answer": "C"
     },
 
     # ── String Operations & Formatting ──
@@ -51,8 +51,8 @@ questions = [
             "   s = 'hello'\n"
             "   print(s[::-1])"
         ),
-        "options": ["A) hello", "B) olleh", "C) hlelo", "D) Error"],
-        "answer": "B"
+        "options": ["A) hlelo", "B) Error", "C) olleh", "D) hello"],
+        "answer": "C"
     },
     {
         "question": (
@@ -60,18 +60,18 @@ questions = [
             "   s = 'Python'\n"
             "   print(s[1:4])"
         ),
-        "options": ["A) Pyt", "B) yth", "C) ytho", "D) thon"],
-        "answer": "B"
+        "options": ["A) thon", "B) Pyt", "C) yth", "D) ytho"],
+        "answer": "C"
     },
     {
         "question": "What is the output of: '{} {}'.format('hello', 'world')?",
-        "options": ["A) hello world", "B) {0} {1}", "C) {} {}", "D) Error"],
+        "options": ["A) hello world", "B) {} {}", "C) Error", "D) {0} {1}"],
         "answer": "A"
     },
     {
         "question": "What does 'hello world'.replace('world', 'Python') return?",
-        "options": ["A) hello Python", "B) hello world", "C) helloPython", "D) Error"],
-        "answer": "A"
+        "options": ["A) helloPython", "B) hello world", "C) hello Python", "D) Error"],
+        "answer": "C"
     },
 
     # ── List/Dict/Set Comprehensions ──
@@ -81,8 +81,8 @@ questions = [
             "   result = [x**2 for x in range(4)]\n"
             "   print(result)"
         ),
-        "options": ["A) [0, 1, 4, 9]", "B) [0, 1, 2, 3]", "C) [1, 4, 9, 16]", "D) [0, 1, 2, 3, 4]"],
-        "answer": "A"
+        "options": ["A) [0, 1, 2, 3, 4]", "B) [0, 1, 2, 3]", "C) [1, 4, 9, 16]", "D) [0, 1, 4, 9]"],
+        "answer": "D"
     },
     {
         "question": (
@@ -90,8 +90,8 @@ questions = [
             "   result = [x for x in range(5) if x % 2 == 0]\n"
             "   print(result)"
         ),
-        "options": ["A) [0, 2, 4]", "B) [1, 3]", "C) [0, 1, 2, 3, 4]", "D) [2, 4]"],
-        "answer": "A"
+        "options": ["A) [2, 4]", "B) [1, 3]", "C) [0, 1, 2, 3, 4]", "D) [0, 2, 4]"],
+        "answer": "D"
     },
     {
         "question": (
@@ -99,8 +99,8 @@ questions = [
             "   d = {x: x**2 for x in range(1, 4)}\n"
             "   print(d)"
         ),
-        "options": ["A) {1: 1, 2: 4, 3: 9}", "B) {1: 2, 2: 3, 3: 4}", "C) {0: 0, 1: 1, 2: 4}", "D) Error"],
-        "answer": "A"
+        "options": ["A) {1: 2, 2: 3, 3: 4}", "B) Error", "C) {0: 0, 1: 1, 2: 4}", "D) {1: 1, 2: 4, 3: 9}"],
+        "answer": "D"
     },
 
     # ── Function Parameters & Arguments ──
@@ -111,8 +111,8 @@ questions = [
             "       return a + b\n"
             "   print(func(5))"
         ),
-        "options": ["A) 5", "B) 15", "C) Error", "D) 10"],
-        "answer": "B"
+        "options": ["A) Error", "B) 10", "C) 15", "D) 5"],
+        "answer": "C"
     },
     {
         "question": (
@@ -121,8 +121,8 @@ questions = [
             "       return sum(args)\n"
             "   print(func(1, 2, 3, 4))"
         ),
-        "options": ["A) (1, 2, 3, 4)", "B) 10", "C) Error", "D) 4"],
-        "answer": "B"
+        "options": ["A) Error", "B) 4", "C) 10", "D) (1, 2, 3, 4)"],
+        "answer": "C"
     },
     {
         "question": (
@@ -131,7 +131,7 @@ questions = [
             "       return kwargs\n"
             "   print(func(name='John', age=25))"
         ),
-        "options": ["A) Error", "B) ('name', 'John', 'age', 25)", "C) {'name': 'John', 'age': 25}", "D) None"],
+        "options": ["A) None", "B) ('name', 'John', 'age', 25)", "C) {'name': 'John', 'age': 25}", "D) Error"],
         "answer": "C"
     },
 
@@ -146,7 +146,7 @@ questions = [
             "   print(func())\n"
             "   print(x)"
         ),
-        "options": ["A) 20, 20", "B) 20, 10", "C) 10, 10", "D) Error"],
+        "options": ["A) 10, 10", "B) 20, 10", "C) 20, 20", "D) Error"],
         "answer": "B"
     },
     {
@@ -159,7 +159,7 @@ questions = [
             "       return inner()\n"
             "   print(outer())"
         ),
-        "options": ["A) Error", "B) 5", "C) None", "D) undefined"],
+        "options": ["A) undefined", "B) 5", "C) None", "D) Error"],
         "answer": "B"
     },
 
@@ -170,7 +170,7 @@ questions = [
             "   f = lambda x: x * 2\n"
             "   print(f(5))"
         ),
-        "options": ["A) 5", "B) 10", "C) Error", "D) 2"],
+        "options": ["A) Error", "B) 10", "C) 2", "D) 5"],
         "answer": "B"
     },
     {
@@ -179,7 +179,7 @@ questions = [
             "   result = list(map(lambda x: x**2, [1, 2, 3]))\n"
             "   print(result)"
         ),
-        "options": ["A) [1, 2, 3]", "B) [1, 4, 9]", "C) 6", "D) Error"],
+        "options": ["A) 6", "B) [1, 4, 9]", "C) Error", "D) [1, 2, 3]"],
         "answer": "B"
     },
     {
@@ -188,7 +188,7 @@ questions = [
             "   result = list(filter(lambda x: x > 2, [1, 2, 3, 4]))\n"
             "   print(result)"
         ),
-        "options": ["A) [1, 2, 3, 4]", "B) [3, 4]", "C) [2, 3, 4]", "D) Error"],
+        "options": ["A) Error", "B) [3, 4]", "C) [2, 3, 4]", "D) [1, 2, 3, 4]"],
         "answer": "B"
     },
 
@@ -201,8 +201,8 @@ questions = [
             "           break\n"
             "       print(i)"
         ),
-        "options": ["A) 0 1 2", "B) 0 1 2 3", "C) 0 1 2 3 4", "D) 0 1"],
-        "answer": "A"
+        "options": ["A) 0 1", "B) 0 1 2 3", "C) 0 1 2", "D) 0 1 2 3 4"],
+        "answer": "C"
     },
     {
         "question": (
@@ -212,7 +212,7 @@ questions = [
             "           continue\n"
             "       print(i)"
         ),
-        "options": ["A) 0 1 3 4", "B) 0 1 2 3 4", "C) 0 1 2", "D) 1 3 4"],
+        "options": ["A) 0 1 3 4", "B) 0 1 2", "C) 1 3 4", "D) 0 1 2 3 4"],
         "answer": "A"
     },
 
@@ -223,7 +223,7 @@ questions = [
             "   d = {'a': 1, 'b': 2}\n"
             "   print(d.get('c', 'default'))"
         ),
-        "options": ["A) None", "B) default", "C) Error", "D) KeyError"],
+        "options": ["A) Error", "B) default", "C) KeyError", "D) None"],
         "answer": "B"
     },
     {
@@ -232,7 +232,7 @@ questions = [
             "   s = {1, 2, 2, 3, 3, 3}\n"
             "   print(len(s))"
         ),
-        "options": ["A) 6", "B) 3", "C) Error", "D) 9"],
+        "options": ["A) 9", "B) 3", "C) Error", "D) 6"],
         "answer": "B"
     },
     {
@@ -243,7 +243,7 @@ questions = [
             "   d1.update(d2)\n"
             "   print(d1)"
         ),
-        "options": ["A) {'a': 1, 'b': 2, 'c': 4}", "B) {'a': 1, 'b': 3, 'c': 4}", "C) Error", "D) {'a': 1, 'b': 2, 'b': 3, 'c': 4}"],
+        "options": ["A) {'a': 1, 'b': 2, 'b': 3, 'c': 4}", "B) {'a': 1, 'b': 3, 'c': 4}", "C) {'a': 1, 'b': 2, 'c': 4}", "D) Error"],
         "answer": "B"
     },
 
@@ -254,7 +254,7 @@ questions = [
             "   lst = [1, 2, 3, 4, 5]\n"
             "   print(lst[-2:])"
         ),
-        "options": ["A) [4, 5]", "B) [3, 4, 5]", "C) [5]", "D) Error"],
+        "options": ["A) [4, 5]", "B) Error", "C) [5]", "D) [3, 4, 5]"],
         "answer": "A"
     },
     {
@@ -263,14 +263,14 @@ questions = [
             "   s = 'Python'\n"
             "   print(s[10])"
         ),
-        "options": ["A) n", "B) Error - IndexError", "C) None", "D) ''"],
+        "options": ["A) None", "B) Error - IndexError", "C) ''", "D) n"],
         "answer": "B"
     },
 
     # ── Boolean Logic & Truthiness ──
     {
         "question": "Which of these is considered FALSY in Python?",
-        "options": ["A) '0'", "B) [0]", "C) []", "D) None"],
+        "options": ["A) [0]", "B) None", "C) []", "D) '0'"],
         "answer": "C"
     },
     {
@@ -279,19 +279,19 @@ questions = [
             "   print(bool(''))\n"
             "   print(bool('hello'))"
         ),
-        "options": ["A) True, True", "B) False, False", "C) False, True", "D) True, False"],
+        "options": ["A) True, False", "B) True, True", "C) False, True", "D) False, False"],
         "answer": "C"
     },
 
     # ── Type Conversions & Edge Cases ──
     {
         "question": "What is int(3.9)?",
-        "options": ["A) 3", "B) 4", "C) 3.0", "D) Error"],
+        "options": ["A) 3", "B) 3.0", "C) Error", "D) 4"],
         "answer": "A"
     },
     {
         "question": "What does int('3.5') return?",
-        "options": ["A) 3", "B) 3.5", "C) Error", "D) '3.5'"],
+        "options": ["A) 3", "B) '3.5'", "C) Error", "D) 3.5"],
         "answer": "C"
     },
     {
@@ -300,8 +300,8 @@ questions = [
             "   x = [1, 2, 3]\n"
             "   print(x + [4])"
         ),
-        "options": ["A) [1, 2, 3, 4]", "B) Error", "C) [5]", "D) [1, 2, 3] + [4]"],
-        "answer": "A"
+        "options": ["A) [1, 2, 3] + [4]", "B) [5]", "C) [1, 2, 3, 4]", "D) Error"],
+        "answer": "C"
     },
 
     # ── Generators & Iterators Basics ──
@@ -313,7 +313,7 @@ questions = [
             "       yield 2\n"
             "   print(list(gen()))"
         ),
-        "options": ["A) Error", "B) [1, 2]", "C) (1, 2)", "D) 1 2"],
+        "options": ["A) (1, 2)", "B) [1, 2]", "C) 1 2", "D) Error"],
         "answer": "B"
     },
 
@@ -326,8 +326,8 @@ questions = [
             "   y.append(4)\n"
             "   print(x)"
         ),
-        "options": ["A) [1, 2, 3, 4]", "B) [1, 2, 3]", "C) Error", "D) [4]"],
-        "answer": "B"
+        "options": ["A) [1, 2, 3]", "B) [4]", "C) Error", "D) [1, 2, 3, 4]"],
+        "answer": "A"
     },
 
     # ── Nested Loops & Complex Logic ──
@@ -340,7 +340,7 @@ questions = [
             "           count += 1\n"
             "   print(count)"
         ),
-        "options": ["A) 3", "B) 2", "C) 6", "D) 5"],
+        "options": ["A) 5", "B) 2", "C) 6", "D) 3"],
         "answer": "C"
     },
     {
@@ -353,8 +353,8 @@ questions = [
             "               result.append(i)\n"
             "   print(result)"
         ),
-        "options": ["A) [0, 1, 2]", "B) [0, 0, 1, 1, 2, 2]", "C) [0, 1, 1, 2, 2]", "D) []"],
-        "answer": "A"
+        "options": ["A) []", "B) [0, 1, 1, 2, 2]", "C) [0, 1, 2]", "D) [0, 0, 1, 1, 2, 2]"],
+        "answer": "C"
     },
 
     # ── Unpacking & Zip ──
@@ -364,8 +364,8 @@ questions = [
             "   a, b = 1, 2\n"
             "   print(a, b)"
         ),
-        "options": ["A) 1 2", "B) (1, 2)", "C) Error", "D) 2 1"],
-        "answer": "A"
+        "options": ["A) 2 1", "B) (1, 2)", "C) 1 2", "D) Error"],
+        "answer": "C"
     },
     {
         "question": (
@@ -373,7 +373,7 @@ questions = [
             "   lists = zip([1, 2, 3], ['a', 'b', 'c'])\n"
             "   print(list(lists))"
         ),
-        "options": ["A) Error", "B) [(1, 'a'), (2, 'b'), (3, 'c')]", "C) [1, 2, 3, 'a', 'b', 'c']", "D) (1, 'a', 2, 'b', 3, 'c')"],
+        "options": ["A) [1, 2, 3, 'a', 'b', 'c']", "B) [(1, 'a'), (2, 'b'), (3, 'c')]", "C) Error", "D) (1, 'a', 2, 'b', 3, 'c')"],
         "answer": "B"
     },
 ]
